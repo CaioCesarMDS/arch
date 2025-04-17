@@ -19,7 +19,7 @@ pacman -S --noconfirm --needed \
   linux linux-firmware base base-devel \
   grub efibootmgr os-prober fuse3 intel-ucode \
   xdg-user-dirs pipewire pipewire-pulse networkmanager \
-  nano git curl wget zsh kitty fastfetch unzip \
+  nano git curl wget zsh fastfetch unzip zip p7zip \
   noto-fonts-emoji ttf-dejavu ttf-liberation \
   noto-fonts ttf-jetbrains-mono ttf-jetbrains-mono-nerd
 
