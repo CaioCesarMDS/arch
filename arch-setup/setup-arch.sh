@@ -19,7 +19,7 @@ pacman -S --noconfirm --needed \
   linux linux-firmware base base-devel \
   grub efibootmgr os-prober fuse3 intel-ucode \
   xdg-user-dirs pipewire pipewire-pulse networkmanager \
-  nano git curl wget zsh fastfetch unzip zip p7zip \
+  nano git sassc curl wget zsh fastfetch unzip zip p7zip \
   noto-fonts-emoji ttf-dejavu ttf-liberation \
   noto-fonts ttf-jetbrains-mono ttf-jetbrains-mono-nerd
 
@@ -90,10 +90,10 @@ cd "$ASDF_DIR"
 sudo -u "$CURRENT_USER" bash -c "cd $ASDF_DIR && makepkg -si --noconfirm"
 
 ZSHRC="$USER_HOME/.zshrc"
-echo 'export PATH="$ASDF_DATA_DIR/shims:$PATH"' >> "$ZSHRC"
 echo 'export ASDF_DATA_DIR="$HOME/.asdf"' >> "$ZSHRC"
+echo 'export PATH="$ASDF_DATA_DIR/shims:$PATH"' >> "$ZSHRC"
 
-echo "Asdf installed and configured in $CURRENT_USER's .zshrc"
+echo "Asdf installed and configured for $CURRENT_USER"
 
 echo "Installing programming languages"
 ## Add Node.js plugin to asdf and install
