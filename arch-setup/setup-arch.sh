@@ -49,8 +49,12 @@ systemctl start NetworkManager
 # Configure pacman to increase parallel package download
 echo "Configuring pacman..."
 PACMAN_FILE="/etc/pacman.conf"
-sed -i '/^#\?ParallelDownloads\s*=.*/d' "$PACMAN_FILE"
-echo "ParallelDownloads = 10" >> "$PACMAN_FILE"
+
+if grep -q "^[#]*ParallelDownloads" "$PACMAN_FILE"; then
+  sed -i 's/^[#]*ParallelDownloads.*/ParallelDownloads = 10/' "$PACMAN_FILE"
+else
+  sed -i '/^\[options\]/a ParallelDownloads = 10' "$PACMAN_FILE"
+fi
 
 # Configure sudoers for wheel group
 echo "Configuring sudoers..."
