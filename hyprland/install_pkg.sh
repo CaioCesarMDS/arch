@@ -14,14 +14,13 @@ pacman -S --noconfirm --needed \
     hyprland \
     hypridle \
     hyprlock \
-    hyprpaper \
     hyprsunset \
     hyprpolkitagent \
     kitty \
-    python-pywal \
     qt5-wayland \
     qt6-wayland \
     sddm \
+    swww \
     xdg-desktop-portal-hyprland \
     xdg-desktop-portal-gtk
 
@@ -30,7 +29,7 @@ pacman -S --noconfirm --needed \
 # ===============================
 pacman -S --noconfirm --needed \
     cliphist \
-    dolphin \
+    thunar \
     swaync \
     waybar \
     wofi \
@@ -40,23 +39,17 @@ pacman -S --noconfirm --needed \
 #         Theming tools
 # ===============================
 pacman -S --noconfirm --needed \
+    python-pywal \
     nwg-look \
     qt5ct \
     qt6ct \
     kvantum \
-    kvantum-qt5 \
-    qt5-quickcontrols \
-    qt5-quickcontrols2 \
-    qt5-graphicaleffects 
-
+    kvantum-qt5 
 
 # ===============================
 #             Extras
 # ===============================
-pacman -S --noconfirm --needed \
-    ark \
-    ffmpegthumbs \
-    kde-cli-tools \
-    qt5-imageformats 
+# pacman -S --noconfirm --needed 
+
 
 
