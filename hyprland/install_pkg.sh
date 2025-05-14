@@ -14,9 +14,11 @@ pacman -S --noconfirm --needed \
     hyprland \
     hypridle \
     hyprlock \
+    hyprpaper \
     hyprsunset \
     hyprpolkitagent \
     kitty \
+    python-pywal \
     qt5-wayland \
     qt6-wayland \
     sddm \
@@ -29,8 +31,7 @@ pacman -S --noconfirm --needed \
 pacman -S --noconfirm --needed \
     cliphist \
     dolphin \
-    dunst \
-    swww \
+    swaync \
     waybar \
     wofi \
     wl-clipboard
@@ -56,6 +57,6 @@ pacman -S --noconfirm --needed \
     ark \
     ffmpegthumbs \
     kde-cli-tools \
-    qt5-imageformats
+    qt5-imageformats 
 
 

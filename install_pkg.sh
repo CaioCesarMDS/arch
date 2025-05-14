@@ -26,14 +26,21 @@ pacman -S --noconfirm --needed \
 #          Utils tools
 # ===============================
 pacman -S --noconfirm --needed \
+    blueman \
+    bluez \
     curl \
     fastfetch \
     git \
     imagemagick \
+    inetutils \
     languagetool \
+    man-db \
+    man-pages \
     nano \
+    openssh \
     p7zip \
     pacman-contrib \
+    procps-ng \
     sassc \
     ufw \
     unzip \
