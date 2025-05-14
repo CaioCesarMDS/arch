@@ -39,7 +39,8 @@ pacman -S --noconfirm --needed \
     unzip \
     wget \
     zip \
-    zsh
+    zsh \
+    wireplumber 
 
 # ===============================
 #   Codecs for audio and video

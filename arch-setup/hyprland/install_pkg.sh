@@ -7,13 +7,55 @@ set -e
 # =======================================
 echo "Installing essential packages..."
 
+# ===============================
+#         Hyprland Setup
+# ===============================
 pacman -S --noconfirm --needed \
-  hyprland kitty sddm dunst wireplumber \
-  xdg-desktop-portal-hyprland xdg-desktop-portal-gtk \
-  hyprpolkitagent qt5-imageformats ffmpegthumbs kde-cli-tools \
-  ffmpegthumbs qt5-wayland qt6-wayland waybar dolphin wofi \
-  hyprpaper cliphist wl-clipboard
+    hyprland \
+    hypridle \
+    hyprlock \
+    hyprsunset \
+    hyprpolkitagent \
+    kitty \
+    qt5-wayland \
+    qt6-wayland \
+    sddm \
+    xdg-desktop-portal-hyprland \
+    xdg-desktop-portal-gtk
+
+# ===============================
+#         System Tools
+# ===============================
+pacman -S --noconfirm --needed \
+    cliphist \
+    dolphin \
+    dunst \
+    swww \
+    waybar \
+    wofi \
+    wl-clipboard
+
+# ===============================
+#         Theming tools
+# ===============================
+pacman -S --noconfirm --needed \
+    nwg-look \
+    qt5ct \
+    qt6ct \
+    kvantum \
+    kvantum-qt5 \
+    qt5-quickcontrols \
+    qt5-quickcontrols2 \
+    qt5-graphicaleffects 
 
 
+# ===============================
+#             Extras
+# ===============================
+pacman -S --noconfirm --needed \
+    ark \
+    ffmpegthumbs \
+    kde-cli-tools \
+    qt5-imageformats
 
 
