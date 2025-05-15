@@ -2,9 +2,8 @@
 
 set -e
 
-if [[ -z "$CURRENT_USER" || -z "$USER_HOME" ]]; then
-  source ./global.env
-fi
+source ./global.env
+source ./functions.sh
 
 # ===============================
 #       Environment Variables
@@ -35,15 +34,66 @@ fi
 # ===============================
 #       Flatpak Installation
 # ===============================
-if ! command -v asdf &>/dev/null; then
+if ! command -v flatpak &>/dev/null; then
   echo "Installing flatpak"
 
   sudo pacman -S --noconfirm --needed flatpak
   flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+else
+  echo "Flatpak already installed"
+fi
 
-  # ===============================
-  #       asdf Installation
-  # ===============================
+# ===============================
+#       Terminal Configuration
+# ===============================
+echo "Configuring terminal..."
+
+if [ ! -d "$USER_HOME/.oh-my-zsh" ]; then
+  echo "Installing Oh My Zsh..."
+  sudo -u "$CURRENT_USER" bash -c "export CHSH=no RUNZSH=no; cd $USER_HOME && sh -c \"\$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)\""
+
+  # Install extras plugins
+  git clone https://github.com/zsh-users/zsh-completions "$USER_HOME/.oh-my-zsh/custom/plugins/zsh-completions"
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting "$USER_HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+  git clone https://github.com/zsh-users/zsh-autosuggestions "$USER_HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+
+  # Install Zoxide
+  sudo -u "$CURRENT_USER" bash -c "curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh"
+
+  # Install FZF
+  if [ ! -d "$USER_HOME/.fzf" ]; then
+    git clone --depth 1 https://github.com/junegunn/fzf.git "$USER_HOME/.fzf"
+    bash "$USER_HOME/.fzf/install" --all
+  else
+    echo "FZF already installed"
+  fi
+
+  # Install Starship
+  sudo pacman -S --noconfirm --needed starship
+
+  # Set plugins
+  add_line_if_missing "plugins=(git zsh-completions zsh-syntax-highlighting zsh-autosuggestions)"
+
+  # Configure .zshrc
+  add_line_if_missing 'export PATH="/usr/bin:$HOME/.local/bin:$PATH"' 
+  echo '' >> "$ZSHRC"
+  add_line_if_missing 'eval "$(starship init zsh)"'
+  add_line_if_missing 'eval "$(zoxide init zsh)"'
+  echo '' >> "$ZSHRC"
+  add_line_if_missing '[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh'
+  echo '' >> "$ZSHRC"
+  add_line_if_missing 'export FZF_CTRL_R_OPTS="--style full"'
+  add_line_if_missing 'export FZF_CTRL_T_OPTS="--style full --walker-skip .git,node_modules,target --preview '\''bat -n --color=always {}'\'' --bind '\''ctrl-/:change-preview-window(down|hidden|)'\''"'
+
+else
+  echo "Oh My Zsh already installed"
+fi
+
+# ===============================
+#       ASDF Installation
+# ===============================
+if ! command -v asdf &>/dev/null; then
+
   echo "Installing asdf..."
 
   if [ ! -d "$ASDF_DIR" ]; then
@@ -54,13 +104,9 @@ if ! command -v asdf &>/dev/null; then
   cd "$ASDF_DIR"
   sudo -u "$CURRENT_USER" bash -c "cd $ASDF_DIR && makepkg -si --noconfirm"
 
-  if ! grep -qxF 'export ASDF_DATA_DIR="$HOME/.asdf"' "$ZSHRC"; then
-    echo 'export ASDF_DATA_DIR="$HOME/.asdf"' >>"$ZSHRC"
-  fi
+  add_line_if_missing 'export ASDF_DATA_DIR="$HOME/.asdf"'
+  add_line_if_missing 'export PATH="$ASDF_DATA_DIR/shims:$PATH"'
 
-  if ! grep -qxF 'export PATH="$ASDF_DATA_DIR/shims:$PATH"' "$ZSHRC"; then
-    echo 'export PATH="$ASDF_DATA_DIR/shims:$PATH"' >>"$ZSHRC"
-  fi
 else
   echo "asdf already installed"
 fi
