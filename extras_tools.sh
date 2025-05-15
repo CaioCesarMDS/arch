@@ -92,6 +92,7 @@ if [ ! -d "$USER_HOME/.oh-my-zsh" ]; then
   add_line_if_missing 'export FZF_CTRL_R_OPTS="--style full"'
   add_line_if_missing 'export FZF_CTRL_T_OPTS="--style full --walker-skip .git,node_modules,target --preview '\''bat -n --color=always {}'\'' --bind '\''ctrl-/:change-preview-window(down|hidden|)'\''"'
 
+  source "$ZSHRC"
 else
   echo "Oh My Zsh already installed"
 fi

@@ -70,8 +70,12 @@ pacman -S --noconfirm --needed \
     noto-fonts \
     noto-fonts-cjk \
     noto-fonts-emoji \
+    noto-fonts-extra \
     ttf-bitstream-vera \
     ttf-dejavu \
+    ttf-firacode-nerd \
     ttf-jetbrains-mono \
     ttf-jetbrains-mono-nerd \
-    ttf-liberation
+    ttf-liberation \
+    ttf-meslo-nerd \
+    ttf-nerd-fonts-symbols
