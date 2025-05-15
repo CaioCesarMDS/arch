@@ -52,8 +52,9 @@ echo "Enabling and starting services..."
 
 systemctl enable NetworkManager
 systemctl start NetworkManager
+
 systemctl enable paccache.timer
-ufw enable
+systemctl enable ufw
 
 # ===============================
 #       Pacman Configuration

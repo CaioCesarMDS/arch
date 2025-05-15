@@ -2,13 +2,16 @@
 
 set -e
 
-source ./global.env
+if [[ -z "$CURRENT_USER" || -z "$USER_HOME" ]]; then
+  source ./global.env
+fi
+
 source ./functions.sh
 
 # ===============================
 #       Environment Variables
 # ===============================
-ASDF_DIR="/opt/asdf"
+ASDF_DIR="$USER_HOME/.asdf"
 ZSHRC="$USER_HOME/.zshrc"
 NODE_VERSION="22.14.0"
 PYTHON_VERSION="3.12.10"
@@ -72,16 +75,20 @@ if [ ! -d "$USER_HOME/.oh-my-zsh" ]; then
   sudo pacman -S --noconfirm --needed starship
 
   # Set plugins
-  add_line_if_missing "plugins=(git zsh-completions zsh-syntax-highlighting zsh-autosuggestions)"
+  if grep -q '^plugins=' "$ZSHRC"; then
+    sed -i '/^plugins=/c\plugins=(git zsh-completions zsh-syntax-highlighting zsh-autosuggestions)' "$ZSHRC"
+  else
+    echo 'plugins=(git zsh-completions zsh-syntax-highlighting zsh-autosuggestions)' >>"$ZSHRC"
+  fi
 
   # Configure .zshrc
-  add_line_if_missing 'export PATH="/usr/bin:$HOME/.local/bin:$PATH"' 
-  echo '' >> "$ZSHRC"
+  add_line_if_missing 'export PATH="/usr/bin:$HOME/.local/bin:$PATH"'
+  echo '' >>"$ZSHRC"
   add_line_if_missing 'eval "$(starship init zsh)"'
   add_line_if_missing 'eval "$(zoxide init zsh)"'
-  echo '' >> "$ZSHRC"
+  echo '' >>"$ZSHRC"
   add_line_if_missing '[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh'
-  echo '' >> "$ZSHRC"
+  echo '' >>"$ZSHRC"
   add_line_if_missing 'export FZF_CTRL_R_OPTS="--style full"'
   add_line_if_missing 'export FZF_CTRL_T_OPTS="--style full --walker-skip .git,node_modules,target --preview '\''bat -n --color=always {}'\'' --bind '\''ctrl-/:change-preview-window(down|hidden|)'\''"'
 

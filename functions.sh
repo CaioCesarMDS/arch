@@ -10,6 +10,6 @@ add_line_if_missing() {
   local line="$1"
 
   if ! grep -qxF "$line" "$ZSHRC"; then
-    echo "$line" >> "$ZSHRC"
+    echo "$line" >>"$ZSHRC"
   fi
 }

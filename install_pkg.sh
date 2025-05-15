@@ -21,7 +21,7 @@ pacman -S --noconfirm --needed \
     pipewire \
     pipewire-pulse \
     networkmanager
-    
+
 # ===============================
 #          Utils tools
 # ===============================
@@ -44,10 +44,11 @@ pacman -S --noconfirm --needed \
     sassc \
     ufw \
     unzip \
+    vim \
     wget \
     zip \
     zsh \
-    wireplumber 
+    wireplumber
 
 # ===============================
 #   Codecs for audio and video

@@ -5,8 +5,8 @@ set -e
 if [ -f ./global.env ]; then
   source ./global.env
 else
-  echo "global.env not found!"; 
-  exit 1;
+  echo "global.env not found!"
+  exit 1
 fi
 
 # ===============================
@@ -33,8 +33,8 @@ pacman -Syu --noconfirm
 if [ -f ./install_pkg.sh ]; then
   source ./install_pkg.sh
 else
-  echo "install_pkg.sh not found!"; 
-  exit 1;
+  echo "install_pkg.sh not found!"
+  exit 1
 fi
 
 # ===============================
@@ -43,8 +43,8 @@ fi
 if [ -f ./configure_system.sh ]; then
   source ./configure_system.sh
 else
-  echo "configure_system.sh not found!";
-  exit 1;
+  echo "configure_system.sh not found!"
+  exit 1
 fi
 
 # ======================================
@@ -53,8 +53,8 @@ fi
 if [ -f ./extras_tools.sh ]; then
   source ./extras_tools.sh
 else
-  echo "extras_tools.sh not found!";
-  exit 1;
+  echo "extras_tools.sh not found!"
+  exit 1
 fi
 
 # ===============================
