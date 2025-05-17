@@ -24,6 +24,11 @@ pacman -S --noconfirm --needed \
     xdg-desktop-portal-hyprland \
     xdg-desktop-portal-gtk
 
+yay -S --noconfirm --needed \
+    wlogout \
+
+pip install pywal
+
 # ===============================
 #         System Tools
 # ===============================
@@ -33,7 +38,7 @@ pacman -S --noconfirm --needed \
     swaync \
     waybar \
     wofi \
-    wl-clipboard
+    wl-clipboard 
 
 # ===============================
 #         Theming tools

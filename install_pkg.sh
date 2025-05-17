@@ -28,6 +28,7 @@ pacman -S --noconfirm --needed \
 pacman -S --noconfirm --needed \
     blueman \
     bluez \
+    bluez-utils \
     curl \
     fastfetch \
     git \
@@ -44,6 +45,7 @@ pacman -S --noconfirm --needed \
     sassc \
     ufw \
     unzip \
+    usbutils \
     vim \
     wget \
     zip \
