@@ -1,0 +1,78 @@
+@import url('../../.cache/wal/colors-waybar.css');
+
+* {
+    all: unset;
+    background-image: none;
+    margin: unset;
+    padding: unset;
+    transition: 200ms cubic-bezier(0, 0, 1, 1);
+}
+
+button {
+    font-family: 'JetBrainsMono Nerd Font Mono', 'MesloLGS NF', 'FiraCode Nerd Font', 'monospace';
+    background-color: alpha(@color9, 1);
+    border-radius: 5px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+button:focus {
+    background-color: alpha(@color5, 1);
+    color: #000000;
+    background-position: center;
+}
+
+#lock, #hibernate, #shutdown, #logout, #suspend, #reboot {
+    margin: 5px 5px 5px 5px;
+    padding: 5px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+}
+
+#lock {
+    background-image: image(url("./icons/lock.png"));
+}
+
+#hibernate {
+    background-image: image(url("./icons/hibernate.png"));
+}
+
+#shutdown {
+    background-image: image(url("./icons/shutdown.png"));
+}
+
+#logout {
+    background-image: image(url("./icons/logout.png"));
+
+}
+
+#suspend {
+    background-image: image(url("./icons/suspend.png"));
+}
+
+#reboot {
+    background-image: image(url("./icons/reboot.png"));
+}
+
+#lock:focus {
+    margin: 5px 5px 5px 200px;
+}
+
+#logout:focus {
+    margin: 5px 200px 5px 5px;
+}
+
+#hibernate:focus {
+    margin: 5px 5px 5px 200px;
+}
+
+#suspend:focus {
+    margin: 5px 200px 5px 5px;
+}
+
+#shutdown:focus {
+    margin: 5px 5px 5px 200px;
+}
+
+#reboot:focus {
+    margin: 5px 200px 5px 5px;
+}
