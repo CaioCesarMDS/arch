@@ -52,27 +52,3 @@ button:focus {
 #reboot {
     background-image: image(url("./icons/reboot.png"));
 }
-
-#lock:focus {
-    margin: 5px 5px 5px 200px;
-}
-
-#logout:focus {
-    margin: 5px 200px 5px 5px;
-}
-
-#hibernate:focus {
-    margin: 5px 5px 5px 200px;
-}
-
-#suspend:focus {
-    margin: 5px 200px 5px 5px;
-}
-
-#shutdown:focus {
-    margin: 5px 5px 5px 200px;
-}
-
-#reboot:focus {
-    margin: 5px 200px 5px 5px;
-}
