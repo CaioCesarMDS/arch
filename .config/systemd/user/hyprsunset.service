@@ -1,0 +1,6 @@
+[Unit]
+Description=Run hyprsunset 
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /home/caio/.config/scripts/hyprsunset/hyprsunset_autostart.sh

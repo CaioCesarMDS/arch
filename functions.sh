@@ -1,4 +1,6 @@
-#!/usr/bin/bash
+#!/bin/bash
+
+set -e
 
 if [[ -z "$CURRENT_USER" || -z "$USER_HOME" ]]; then
   source ./global.env

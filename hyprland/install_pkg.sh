@@ -38,7 +38,9 @@ pacman -S --noconfirm --needed \
     swaync \
     waybar \
     wofi \
-    wl-clipboard
+    wl-clipboard \
+    pavucontrol \
+    pamixer 
 
 # ===============================
 #         Theming tools
