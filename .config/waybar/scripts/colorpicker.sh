@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
+set -e
 
 check() {
   command -v "$1" 1>/dev/null
