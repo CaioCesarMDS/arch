@@ -29,6 +29,7 @@ pacman -S --noconfirm --needed \
     blueman \
     bluez \
     bluez-utils \
+    btop \
     curl \
     fastfetch \
     git \

@@ -14,7 +14,6 @@ pacman -S --noconfirm --needed \
     hyprland \
     hypridle \
     hyprlock \
-    hyprsunset \
     hyprpolkitagent \
     kitty \
     qt5-wayland \
@@ -25,7 +24,8 @@ pacman -S --noconfirm --needed \
     xdg-desktop-portal-gtk
 
 yay -S --noconfirm --needed \
-    wlogout \
+    hyprsunset \
+    wlogout
 
 pip install pywal
 
@@ -38,7 +38,7 @@ pacman -S --noconfirm --needed \
     swaync \
     waybar \
     wofi \
-    wl-clipboard 
+    wl-clipboard
 
 # ===============================
 #         Theming tools
@@ -49,12 +49,13 @@ pacman -S --noconfirm --needed \
     qt5ct \
     qt6ct \
     kvantum \
-    kvantum-qt5 
+    kvantum-qt5
 
 # ===============================
 #             Extras
 # ===============================
-# pacman -S --noconfirm --needed 
+pacman -S --noconfirm --needed \
+    gvfs
 
-
-
+yay -S --noconfirm --needed \
+    libnotify
