@@ -10,6 +10,7 @@ echo "Installing essential packages..."
 pacman -S --noconfirm --needed \
     linux \
     linux-firmware \
+    linux-headers \
     base \
     base-devel \
     grub \
@@ -35,6 +36,7 @@ pacman -S --noconfirm --needed \
     git \
     imagemagick \
     inetutils \
+    jq \
     languagetool \
     man-db \
     man-pages \
@@ -64,7 +66,7 @@ pacman -S --noconfirm --needed \
     gst-plugins-bad \
     gst-libav \
     gstreamer \
-    vlc
+    mpv
 
 # ===============================
 #            Fonts
@@ -77,6 +79,7 @@ pacman -S --noconfirm --needed \
     ttf-bitstream-vera \
     ttf-dejavu \
     ttf-firacode-nerd \
+    ttf-font-awesome \
     ttf-jetbrains-mono \
     ttf-jetbrains-mono-nerd \
     ttf-liberation \
