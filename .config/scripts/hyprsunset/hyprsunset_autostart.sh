@@ -11,7 +11,8 @@ TEMP_FILE="$CONFIG_DIR/hyprsunset_temperature"
 if [ -e "$MANUAL_MODE_FILE" ]; then
     if ! pgrep -x hyprsunset > /dev/null; then
         notify-send "Hyprland" "Starting Hyprsunset automatically"
-        hyprsunset -t "$(cat "$TEMP_FILE" 2>/dev/null || echo 2800)" &
+        temp=$(cat "$TEMP_FILE" 2>/dev/null || echo 2800)
+        hyprsunset -t "$temp" &
     fi
     exit 0
 fi
@@ -31,7 +32,6 @@ else
 fi
 
 if [ "$current_temp" -ne "$desired_temp" ]; then
-    notify-send "Hyprland" "Starting Hyprsunset"
     hyprsunset -t "$desired_temp" &
     echo "$desired_temp" > "$TEMP_FILE"
 fi
