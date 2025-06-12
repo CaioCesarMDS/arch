@@ -109,3 +109,18 @@ if ! command -v zsh >/dev/null 2>&1; then
 fi
 
 chsh -s "$(which zsh)" "$CURRENT_USER"
+
+# ===============================
+#   Copy wallpaper files
+# ===============================
+echo "Copying wallpapers to user's home directory..."
+
+if [ ! -d ./wallpapers ]; then
+  echo "Error: Directory ./wallpapers not found."
+  exit 1
+fi
+
+cp -r ./wallpapers "/home/$CURRENT_USER/"
+
+
+

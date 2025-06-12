@@ -122,8 +122,8 @@ if ! command -v asdf &>/dev/null; then
   cd "$ASDF_DIR"
   sudo -u "$CURRENT_USER" bash -c "cd $ASDF_DIR && makepkg -si --noconfirm"
 
-  add_line_if_missing 'export ASDF_DATA_DIR="$HOME/.asdf"'
-  add_line_if_missing 'export PATH="$ASDF_DATA_DIR/shims:$PATH"'
+  add_line_if_missing "export ASDF_DATA_DIR=\"$HOME/.asdf\""
+  add_line_if_missing "export PATH=\"\$ASDF_DATA_DIR/shims:\$PATH\""
 
 else
   echo "asdf already installed"
