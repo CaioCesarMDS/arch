@@ -34,10 +34,10 @@ pip install pywal
 # ===============================
 pacman -S --noconfirm --needed \
     cliphist \
-    thunar \
+    dolphin \
     swaync \
     waybar \
-    wofi \
+    rofi-wayland \
     wl-clipboard \
     pavucontrol \
     pamixer 
@@ -57,7 +57,16 @@ pacman -S --noconfirm --needed \
 #             Extras
 # ===============================
 pacman -S --noconfirm --needed \
-    gvfs
+    ark \
+    dolphin-plugins \
+    ffmpegthumbs \
+    gvfs \
+    kde-cli-tools \
+    kio-admin \
+    qt5-imageformats \
+    qt5-quickcontrols \
+    qt5-quickcontrols2 \
+    qt5-graphicaleffects
 
 yay -S --noconfirm --needed \
     libnotify
