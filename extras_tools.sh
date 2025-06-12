@@ -3,7 +3,17 @@
 set -e
 
 if [[ -z "$CURRENT_USER" || -z "$USER_HOME" ]]; then
-  source ./global.env
+  if [ -f ./global.env ]; then
+    source ./global.env
+  else
+    echo "Error: CURRENT_USER not set and global.env not found."
+    exit 1
+  fi
+fi
+
+if [ -z "$CURRENT_USER" ]; then
+  echo "Error: CURRENT_USER is still not defined after sourcing global.env."
+  exit 1
 fi
 
 source ./functions.sh

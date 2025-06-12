@@ -3,7 +3,17 @@
 set -e
 
 if [ -z "$CURRENT_USER" ]; then
-  source ./global.env
+  if [ -f ./global.env ]; then
+    source ./global.env
+  else
+    echo "Error: CURRENT_USER not set and global.env not found."
+    exit 1
+  fi
+fi
+
+if [ -z "$CURRENT_USER" ]; then
+  echo "Error: CURRENT_USER is still not defined after sourcing global.env."
+  exit 1
 fi
 
 # ===============================
@@ -50,6 +60,8 @@ grub-mkconfig -o /boot/grub/grub.cfg
 # ===============================
 echo "Enabling and starting services..."
 
+systemctl enable pipewire pipewire-pulse wireplumber
+
 systemctl enable NetworkManager
 systemctl start NetworkManager
 
@@ -90,5 +102,10 @@ sudo -u "$CURRENT_USER" xdg-user-dirs-update
 #   Set ZSH as Default Shell
 # ===============================
 echo "Setting zsh as default shell for $CURRENT_USER..."
+
+if ! command -v zsh >/dev/null 2>&1; then
+  echo "Error: zsh not found. Install it before setting as default shell."
+  exit 1
+fi
 
 chsh -s "$(which zsh)" "$CURRENT_USER"
