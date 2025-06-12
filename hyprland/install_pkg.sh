@@ -37,7 +37,7 @@ pacman -S --noconfirm --needed \
     dolphin \
     swaync \
     waybar \
-    rofi-wayland \
+    wofi \
     wl-clipboard \
     pavucontrol \
     pamixer 

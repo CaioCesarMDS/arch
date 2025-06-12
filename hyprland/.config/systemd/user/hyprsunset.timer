@@ -1,5 +1,5 @@
 [Unit]
-Description=Run hyprsunset.service 5min after boot and every 30min thereafter 
+Description=Run hyprsunset.service 5min after boot and every 15min thereafter 
 
 [Timer]
 Unit=hyprsunset.service

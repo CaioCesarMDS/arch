@@ -15,7 +15,7 @@
     "notification-inline-replies": true,
     "notification-window-width": 350,
     "notification-icon-size": 60,
-    "notification-body-image-height":  180,
+    "notification-body-image-height": 180,
     "notification-body-image-width": 200,
     "timeout": 12,
     "timeout-low": 6,
@@ -72,16 +72,15 @@
                     "command": "blueman-manager"
                 },
                 {
-                    "label":"󰤄",
-                    "command": "bash -c 'sh ~/.config/swaync/scripts/hyprsunset_toggle.sh'",
-                    "type":"toggle",
-                    "active": "bash -c 'sh ~/.config/swaync/scripts/hyprsunset_on.sh'"
+                    "label": "󰤄",
+                    "active": false,
+                    "command": "bash -c 'sh ~/.config/swaync/scripts/hyprsunset_toggle.sh && sh ~/.config/swaync/scripts/config/generate_config.sh && swaync-client -R'",
+                    "type": "toggle"
                 },
                 {
                     "label": "󰀟",
                     "command": ""
                 },
-
                 {
                     "label": "󰈙",
                     "command": ""
@@ -89,26 +88,23 @@
                 {
                     "label": "",
                     "command": ""
-                    
                 },
                 {
                     "label": "",
                     "command": "kitty bash -i -c btop"
-
                 },
                 {
                     "label": "",
                     "command": "hyprlock"
                 },
                 {
-                    "label":"",
+                    "label": "",
                     "command": "reboot"
                 },
                 {
-                    "label":"",
+                    "label": "",
                     "command": "shutdown now"
                 }
-
             ]
         }
     }

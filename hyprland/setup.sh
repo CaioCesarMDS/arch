@@ -35,4 +35,4 @@ fi
 # ===============================
 #             End
 # ===============================
-echo "Installation is complete! You can now start Hyperland with SDDM."
+echo "Installation is complete!"
