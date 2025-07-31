@@ -7,7 +7,7 @@ THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$THIS_DIR/../utils.sh"
 source "$THIS_DIR/../core/env.sh"
 
-CONFIG_SRC="$THIS_DIR/.config"
+CONFIG_SRC="$THIS_DIR/../hyprland/.config"
 CONFIG_DEST="$USER_HOME/.config"
 
 WALLPAPER_SRC="$THIS_DIR/../assets/wallpapers"
@@ -24,11 +24,6 @@ copy_configs() {
     chown -R "$CURRENT_USER:$CURRENT_USER" "$CONFIG_DEST"
 }
 
-enable_sddm() {
-    log_info "Enabling SDDM service..."
-    systemctl enable sddm.service --now
-}
-
 copy_wallpapers() {
     log_info "Copying wallpapers to $WALLPAPER_DEST..."
     if [[ ! -d "$WALLPAPER_SRC" ]]; then
@@ -38,6 +33,11 @@ copy_wallpapers() {
     mkdir -p "$WALLPAPER_DEST"
     cp -r "$WALLPAPER_SRC"/* "$WALLPAPER_DEST/"
     chown -R "$CURRENT_USER:$CURRENT_USER" "$WALLPAPER_DEST"
+}
+
+enable_sddm() {
+    log_info "Enabling SDDM service..."
+    systemctl enable sddm.service --now
 }
 
 main() {

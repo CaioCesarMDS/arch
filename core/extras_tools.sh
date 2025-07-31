@@ -5,7 +5,7 @@ set -euo pipefail
 THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 source "$THIS_DIR/../utils.sh"
-source "$THIS_DIR/.env.sh"
+source "$THIS_DIR/env.sh"
 
 install_yay() {
     if ! command -v yay &>/dev/null; then
