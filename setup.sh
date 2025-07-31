@@ -1,68 +1,43 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
-if [ -f ./global.env ]; then
-  source ./global.env
-else
-  echo "global.env not found!"
-  exit 1
-fi
+source ./utils.sh
 
-# ===============================
-#   Check if running as root
-# ===============================
-if [ "$EUID" -ne 0 ]; then
-  echo "This script must be run as root (use sudo)"
-  exit 1
-fi
+load_env() {
+    local env_file="./core/env.sh"
+    if [[ -f "$env_file" ]]; then
+        source "$env_file"
+    else
+        log_error "Environment file $env_file not found!"
+        exit 1
+    fi
 
-echo -e "\n==============================="
-echo "  Starting Arch Linux Setup"
-echo -e "===============================\n"
+    if [[ -z "${CURRENT_USER:-}" || -z "${USER_HOME:-}" ]]; then
+        log_error "CURRENT_USER or USER_HOME is not set in $env_file."
+        exit 1
+    fi
+}
 
-# ===============================
-#         Update system
-# ===============================
-echo "Updating the system..."
-pacman -Syu --noconfirm
+update_system() {
+    log_info "Updating the system..."
+    pacman -Syu --noconfirm
+}
 
-# ===============================
-#   Install essential packages
-# ===============================
-if [ -f ./install_pkg.sh ]; then
-  source ./install_pkg.sh
-else
-  echo "install_pkg.sh not found!"
-  exit 1
-fi
+main() {
+    echo -e "\n======================================"
+    echo "  🚀 Starting Arch Linux Setup + Hyprland"
+    echo -e "========================================\n"
 
-# ===============================
-#   Configure GRUB, pacman, ...
-# ===============================
-if [ -f ./configure_system.sh ]; then
-  source ./configure_system.sh
-else
-  echo "configure_system.sh not found!"
-  exit 1
-fi
+    check_root
+    load_env
+    update_system
 
-# ======================================
-# Install additional software and tools
-# ======================================
-if [ -f ./extras_tools.sh ]; then
-  source ./extras_tools.sh
-else
-  echo "extras_tools.sh not found!"
-  exit 1
-fi
+    run_script "./core/install_packages.sh"
+    run_script "./core/configure_system.sh"
+    run_script "./core/extras_tools.sh"
 
-# ===============================
-#           End
-# ===============================
-read -rp "Reboot now? [y/n]: " answer
-if [[ "$answer" =~ ^[Yy]$ ]]; then
-  reboot
-else
-  echo "You can reboot manually when you're ready."
-fi
+    prompt_reboot
+}
+
+main
