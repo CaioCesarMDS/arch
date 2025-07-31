@@ -17,7 +17,7 @@ install_grub() {
     fi
 
     if [[ ! -f "$EFI_DIR/EFI/GRUB/grubx64.efi" ]]; then
-        grub-install --target=x86_64-efi --efi-directory="$EFI_DIR" --bootloader-id=GRUB --recheck
+        grub-install --target=x86_64-efi --efi-directory="$EFI_DIR" --bootloader-id=ARCH --recheck
     else
         log_info "GRUB already installed, skipping."
     fi
@@ -32,10 +32,14 @@ configure_grub() {
         exit 1
     fi
 
-    if grep -q "^#*GRUB_DISABLE_OS_PROBER=" "$GRUB_FILE"; then
-        sed -i 's/^#*GRUB_DISABLE_OS_PROBER=.*/GRUB_DISABLE_OS_PROBER=false/' "$GRUB_FILE"
+    if [[ -x "$(command -v os-prober)" ]]; then
+        if grep -q "^#*GRUB_DISABLE_OS_PROBER=" "$GRUB_FILE"; then
+            sed -i 's/^#*GRUB_DISABLE_OS_PROBER=.*/GRUB_DISABLE_OS_PROBER=false/' "$GRUB_FILE"
+        else
+            echo "GRUB_DISABLE_OS_PROBER=false" >>"$GRUB_FILE"
+        fi
     else
-        echo "GRUB_DISABLE_OS_PROBER=false" >>"$GRUB_FILE"
+        log_info "os-prober not found. Skipping multi-OS detection config."
     fi
 
     grub-mkconfig -o /boot/grub/grub.cfg

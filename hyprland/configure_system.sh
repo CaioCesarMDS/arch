@@ -7,7 +7,7 @@ THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$THIS_DIR/../utils.sh"
 source "$THIS_DIR/../core/env.sh"
 
-CONFIG_SRC="$THIS_DIR/../hyprland/.config"
+CONFIG_SRC="$THIS_DIR/../.config"
 CONFIG_DEST="$USER_HOME/.config"
 
 WALLPAPER_SRC="$THIS_DIR/../assets/wallpapers"
