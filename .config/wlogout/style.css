@@ -3,29 +3,30 @@
 * {
     all: unset;
     background-image: none;
+    box-shadow: none;
     margin: unset;
     padding: unset;
     transition: 200ms cubic-bezier(0, 0, 1, 1);
 }
 
 button {
-    font-family: 'JetBrainsMono Nerd Font Mono', 'MesloLGS NF', 'FiraCode Nerd Font', 'monospace';
+    font-family: 'JetBrainsMono Nerd Font Mono', 'FiraCode Nerd Font', 'monospace';
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.5rem;
+    margin: 2rem;
+    border-radius: 2rem;
     background-color: alpha(@color9, 1);
-    border-radius: 5px;
+    background-size: 3rem;
     background-repeat: no-repeat;
     background-position: center;
 }
 
-button:focus {
-    background-color: alpha(@color5, 1);
-    color: #000000;
-    background-position: center;
-}
-
-#lock, #hibernate, #shutdown, #logout, #suspend, #reboot {
-    margin: 5px 5px 5px 5px;
-    padding: 5px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.6);
+button:focus,
+button:active,
+button:hover {
+	background-color: rgba(49, 47, 47, 0.5);
+	border-radius: 4rem;
 }
 
 #lock {
@@ -52,3 +53,4 @@ button:focus {
 #reboot {
     background-image: image(url("./icons/reboot.png"));
 }
+2
