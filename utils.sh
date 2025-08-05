@@ -36,8 +36,14 @@ run_script() {
     fi
 }
 
+install_packages() {
+    local title="$1"; shift
+    log_info "Installing: $title"
+    pacman -S --noconfirm --needed "$@"
+}
+
 prompt_reboot() {
-    log_info "✅ Installation completed successfully".
+    log_info "✅ Installation completed successfully."
     read -rp "Reboot now? [y/N]: " ans
     if [[ "$ans" =~ ^([Yy])$ ]]; then
         reboot
