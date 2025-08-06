@@ -1,36 +1,30 @@
 @import url('../../.cache/wal/colors-waybar.css');
 
 * {
+    all: unset;
     font-size: 18px;
-    font-family: "JetBrainsMono Nerd Font Mono", "MesloLGS NF", "FiraCode Nerd Font", "monospace";
+    font-family: "JetBrainsMono Nerd Font Mono", "FiraCode Nerd Font", "monospace";
 }
 
-window#waybar {
-    all: unset;
+.modules-left,
+.modules-center,
+.modules-right {
+    padding: 7px;
+    border-radius: 10px;
+    background: alpha(@background, .6);
+    box-shadow: 0 0 2px rgba(0, 0, 0, .6);
 }
 
 .modules-left {
-    padding: 7px;
-    margin: 10px 0 5px 10px;
-    border-radius: 10px;
-    background: alpha(@background, .6);
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, .6);
+    margin: 8px 0 5px 10px;
 }
 
 .modules-center {
-    padding: 7px;
-    margin: 10px 0 5px 0px;
-    border-radius: 10px;
-    background: alpha(@background, .6);
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, .6);
+    margin: 8px 0 5px 0;
 }
 
 .modules-right {
-    padding: 7px;
-    margin: 10px 10px 5px 0px;
-    border-radius: 10px;
-    background: alpha(@background, .6);
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, .6);
+    margin: 8px 10px 5px 0;
 }
 
 tooltip {
@@ -39,13 +33,11 @@ tooltip {
 }
 
 #custom-notification:hover,
-#clock:hover,
-#custom-pacman:hover,
+#clock:hover, 
 #custom-cliphist:hover,
 #cpu:hover,
 #memory:hover,
 #temperature:hover,
-#custom-volume:hover,
 #bluetooth:hover,
 #network:hover,
 #custom-power:hover {
@@ -56,15 +48,10 @@ tooltip {
 /* Modules Left */
 
 #custom-notification,
-#clock,
-#custom-pacman {
-    padding: 0px 6px;
+#clock {
+    padding: 0 10px;
     transition: all .3s ease;
     color: @color7;
-}
-
-#custom-pacman {
-    font-size: 24px;
 }
 
 #clock {
@@ -72,29 +59,28 @@ tooltip {
 }
 
 #tray {
-    padding: 0px 8px;
+    padding: 0 8px;
     transition: all .3s ease;
 }
 
 #tray menu * {
-    padding: 0px 5px;
+    padding: 0 5px;
     transition: all .3s ease;
 }
 
 #tray menu separator {
-    padding: 0px 5px;
+    padding: 0 5px;
     transition: all .3s ease;
 }
 
 /* Modules Center */
 
 #workspaces {
-    padding: 0px 5px;
+    padding: 0 10px;
 }
 
 #workspaces button {
-    all: unset;
-    padding: 0px 5px;
+    padding: 0 5px;
     color: alpha(@color9, .4);
     transition: all .2s ease;
 }
@@ -102,85 +88,77 @@ tooltip {
 #workspaces button:hover {
     color: rgba(0, 0, 0, 0);
     border: none;
-    text-shadow: 0px 0px 1.5px rgba(0, 0, 0, .5);
+    text-shadow: 0 0 1.5px rgba(0, 0, 0, .5);
     transition: all .5s ease;
 }
 
 #workspaces button.active {
     color: @color9;
     border: none;
-    text-shadow: 0px 0px 2px rgba(0, 0, 0, .5);
+    text-shadow: 0 0 2px rgba(0, 0, 0, .5);
 }
 
 #workspaces button.empty {
     color: rgba(0, 0, 0, 0);
     border: none;
-    text-shadow: 0px 0px 1.5px rgba(0, 0, 0, .2);
+    text-shadow: 0 0 1.5px rgba(0, 0, 0, .2);
 }
 
 #workspaces button.empty:hover {
     color: rgba(0, 0, 0, 0);
     border: none;
-    text-shadow: 0px 0px 1.5px rgba(0, 0, 0, .5);
+    text-shadow: 0 0 1.5px rgba(0, 0, 0, .5);
     transition: all 1s ease;
 }
 
 #workspaces button.empty.active {
     color: @color9;
     border: none;
-    text-shadow: 0px 0px 2px rgba(0, 0, 0, .5);
+    text-shadow: 0 0 2px rgba(0, 0, 0, .5);
 }
 
 /* Modules Right */
 
-#group-expand {
-    padding: 0px 5px;
-    transition: all .3s ease;
-}
-
 #custom-expand {
-    padding: 0px 5px;
+    padding: 0 5px;
     color: alpha(@foreground, .2);
-    text-shadow: 0px 0px 2px rgba(0, 0, 0, .7);
+    text-shadow: 0 0 2px rgba(0, 0, 0, .7);
     transition: all .3s ease;
 }
 
 #custom-expand:hover {
     color: rgba(255, 255, 255, .2);
-    text-shadow: 0px 0px 2px rgba(255, 255, 255, .5);
-}
-
-#custom-colorpicker {
-    padding: 0px 5px;
+    text-shadow: 0 0 2px rgba(255, 255, 255, .5);
 }
 
 #custom-cliphist,
+#custom-colorpicker,
 #cpu,
 #memory,
 #temperature {
-    padding: 0px 6px;
+    padding: 0 6px;
     transition: all .3s ease;
     color: @color7;
 }
 
 #temperature {
+    padding-left: 0;
     font-size: 16px;
 }
 
 #custom-separator {
     color: transparent;
-    text-shadow: 0px 0px 1.5px rgba(16, 16, 16, 0.38);
+    text-shadow: 0 0 1.5px rgba(12, 12, 12, 0.38);
 }
 
-#custom-volume {
-    font-size: 24px;
-}
-
-#custom-volume,
 #bluetooth,
 #network,
 #custom-power {
-    padding: 0px 5px;
+    padding: 0 6px;
     transition: all .3s ease;
     color: @color7;
+}
+
+#bluetooth {
+  font-size: 16px;
 }
