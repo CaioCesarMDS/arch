@@ -15,8 +15,9 @@ install_packages "Hyprland and core components" \
     xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
 
 install_packages "System utilities" \
-    amberol clapper cliphist nautilus loupe swaync waybar wofi wl-clipboard \
-    pavucontrol pamixer
+    clapper cliphist gnome-keyring nautilus loupe \
+    pavucontrol pamixer swaync waybar wofi wl-clipboard 
+
 
 install_packages "audio/video codecs" \
     ffmpeg gst-plugins-ugly gst-plugins-good gst-plugins-base \
