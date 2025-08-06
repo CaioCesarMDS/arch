@@ -1,0 +1,1 @@
+hyprsunset -t 2800 &
