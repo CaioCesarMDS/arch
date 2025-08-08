@@ -47,7 +47,7 @@
       "text": "Do Not Disturb"
     },
     "volume": {
-      "label": "󰕾 "
+      "label": "󰕾"
     },
     "buttons-grid": {
       "buttons-per-row": 4,
@@ -63,10 +63,8 @@
           "type": "toggle"
         },
         {
-          "label": "󰤄",
-          "active": false,
-          "command": "bash ~/.config/swaync/scripts/hyprsunset_toggle.sh",
-          "type": "toggle"
+          "label": "",
+          "command": "swaync-client -cp && hyprshot -m region -f $(date +%Y-%m-%d_%H-%M-%S).png -o ~/Pictures/screenshots"
         },
         {
           "label": "",
