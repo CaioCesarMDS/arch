@@ -11,7 +11,7 @@ log_info "Installing essential packages for Hyprland..."
 
 install_packages "Hyprland and core components" \
     hyprland hypridle hyprlock hyprpicker hyprpolkitagent hyprsunset hyprshot \
-    kitty qt5-wayland qt6-wayland gdm swww \
+    kitty qt5-wayland qt6-wayland sddm swww \
     xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
 
 install_packages "System utilities" \
