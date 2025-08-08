@@ -21,7 +21,7 @@ if [[ $# -eq 1 && $1 == "-j" ]]; then
   if ! [[ "$text" =~ ^#[0-9a-fA-F]{6}$ ]]; then
     text="#ffffff"
   fi
-
+  
   mapfile -t allcolors < <(tail -n +2 "$loc/colors")
 
   tooltip="<b>   COLORS</b>\n\n"
