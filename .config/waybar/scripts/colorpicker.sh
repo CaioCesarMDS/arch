@@ -18,14 +18,18 @@ fi
 if [[ $# -eq 1 && $1 == "-j" ]]; then
   text="$(head -n 1 "$loc/colors")"
 
-  [[ -z "$text" ]] && text="#ffffff"
+  if ! [[ "$text" =~ ^#[0-9a-fA-F]{6}$ ]]; then
+    text="#ffffff"
+  fi
   
   mapfile -t allcolors < <(tail -n +2 "$loc/colors")
 
   tooltip="<b>   COLORS</b>\n\n"
   tooltip+="-> <b>$text</b>  <span color='$text'></span>  \n"
   for i in "${allcolors[@]}"; do
-    tooltip+="   <b>$i</b>  <span color='$i'></span>  \n"
+    if [[ "$i" =~ ^#[0-9a-fA-F]{6}$ ]]; then
+      tooltip+="   <b>$i</b>  <span color='$i'></span>  \n"
+    fi
   done
 
   tooltip="${tooltip//$'\n'/\\n}"
@@ -37,15 +41,21 @@ EOF
 fi
 
 if ! check hyprpicker; then
-  notify-send "Color Picker" "hyprpicker is not installed"
+  notify-send "Color Picker" "Hyprpicker is not installed"
   exit 1
 fi
 
 pkill -x hyprpicker 2>/dev/null || true
 
 color=$(hyprpicker | tr -d '\n')
+
 if [[ -z "$color" ]]; then
-  notify-send "Color Picker" "Nenhuma cor selecionada."
+  notify-send "Color Picker" "No color selected"
+  exit 1
+fi
+
+if ! [[ "$color" =~ ^#[0-9a-fA-F]{6}$ ]]; then
+  notify-send "Color Picker" "Invalid color format: $color"
   exit 1
 fi
 
@@ -63,6 +73,7 @@ prevColors=$(grep -vFx "$color" "$loc/colors" 2>/dev/null | head -n $((limit - 1
 if [[ -f ~/.cache/wal/colors.sh ]]; then
   source ~/.cache/wal/colors.sh
 fi
+
 if [[ -n "$wallpaper" ]]; then
   notify-send "Color Picker" "Selected: $color" -i "$wallpaper"
 else

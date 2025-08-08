@@ -1,164 +1,154 @@
-@import url('../../.cache/wal/colors-waybar.css');
+@import url("../../.cache/wal/colors-waybar.css");
 
 * {
-    all: unset;
-    font-size: 18px;
-    font-family: "JetBrainsMono Nerd Font Mono", "FiraCode Nerd Font", "monospace";
+	all: unset;
+  font-size: 1.25rem;
+  font-family: "JetBrainsMono Nerd Font Mono", "FiraCode Nerd Font", "monospace";
+	border: none;
 }
 
 .modules-left,
 .modules-center,
 .modules-right {
-    padding: 7px;
-    border-radius: 10px;
-    background: alpha(@background, .6);
-    box-shadow: 0 0 2px rgba(0, 0, 0, .6);
+  padding: 0.45rem;
+  border-radius: 10px;
+  background-color: alpha(@background, 0.6);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
 }
 
 .modules-left {
-    margin: 8px 0 5px 10px;
+  margin: 0.4rem 0 0.5rem 0.6rem;
 }
 
 .modules-center {
-    margin: 8px 0 5px 0;
+  margin: 0.4rem 0 0.5rem 0;
 }
 
 .modules-right {
-    margin: 8px 10px 5px 0;
+  margin: 0.4rem 0.5rem 0.6rem 0;
 }
 
 tooltip {
-    background: @background;
-    color: @color7;
+  background: @background;
+	border-radius: 8px;
+	border: 1px solid @color7;
+  color: @color7;
 }
 
 #custom-notification:hover,
-#clock:hover, 
+#clock:hover,
 #custom-cliphist:hover,
+#custom-bluefilter:hover,
 #cpu:hover,
 #memory:hover,
 #temperature:hover,
 #bluetooth:hover,
 #network:hover,
 #custom-power:hover {
-    transition: all .3s ease;
-    color: @color9;
+  transition: all 0.3s ease;
+  color: @color9;
 }
 
 /* Modules Left */
 
 #custom-notification,
-#clock {
-    padding: 0 10px;
-    transition: all .3s ease;
-    color: @color7;
-}
-
-#clock {
-    font-size: 14px;
-}
-
+#clock,
 #tray {
-    padding: 0 8px;
-    transition: all .3s ease;
+  padding: 0 0.6rem;
+  transition: all 0.3s ease;
+  color: @color7;
 }
 
-#tray menu * {
-    padding: 0 5px;
-    transition: all .3s ease;
-}
-
-#tray menu separator {
-    padding: 0 5px;
-    transition: all .3s ease;
+#clock {
+  font-size: 1rem;
 }
 
 /* Modules Center */
 
 #workspaces {
-    padding: 0 10px;
+  padding: 0 0.7rem;
 }
 
 #workspaces button {
-    padding: 0 5px;
-    color: alpha(@color9, .4);
-    transition: all .2s ease;
+  padding: 0 0.4rem;
+  color: alpha(@color9, 0.4);
+  transition: all 0.2s ease;
 }
 
 #workspaces button:hover {
-    color: rgba(0, 0, 0, 0);
-    border: none;
-    text-shadow: 0 0 1.5px rgba(0, 0, 0, .5);
-    transition: all .5s ease;
+  color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 1.5px rgba(0, 0, 0, 0.5);
+  transition: all 0.5s ease;
 }
 
 #workspaces button.active {
-    color: @color9;
-    border: none;
-    text-shadow: 0 0 2px rgba(0, 0, 0, .5);
+  color: @color9;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
 #workspaces button.empty {
-    color: rgba(0, 0, 0, 0);
-    border: none;
-    text-shadow: 0 0 1.5px rgba(0, 0, 0, .2);
+  color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 1.5px rgba(0, 0, 0, 0.2);
 }
 
 #workspaces button.empty:hover {
-    color: rgba(0, 0, 0, 0);
-    border: none;
-    text-shadow: 0 0 1.5px rgba(0, 0, 0, .5);
-    transition: all 1s ease;
+  color: rgba(0, 0, 0, 0);
+  text-shadow: 0 0 1.5px rgba(0, 0, 0, 0.5);
+  transition: all 1s ease;
 }
 
 #workspaces button.empty.active {
-    color: @color9;
-    border: none;
-    text-shadow: 0 0 2px rgba(0, 0, 0, .5);
+  color: @color9;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Modules Right */
 
 #custom-expand {
-    padding: 0 5px;
-    color: alpha(@foreground, .2);
-    text-shadow: 0 0 2px rgba(0, 0, 0, .7);
-    transition: all .3s ease;
+  padding: 0 0.5rem;
+  color: alpha(@foreground, 0.2);
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
+  transition: all 0.3s ease;
 }
 
 #custom-expand:hover {
-    color: rgba(255, 255, 255, .2);
-    text-shadow: 0 0 2px rgba(255, 255, 255, .5);
+  color: rgba(255, 255, 255, 0.2);
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
 }
 
 #custom-cliphist,
 #custom-colorpicker,
+#custom-bluefilter,
 #cpu,
 #memory,
 #temperature {
-    padding: 0 6px;
-    transition: all .3s ease;
-    color: @color7;
+  padding: 0 0.6rem;
+  transition: all 0.3s ease;
+  color: @color7;
+}
+
+#custom-bluefilter {
+	font-size: 1.3rem;
 }
 
 #temperature {
-    padding-left: 0;
-    font-size: 16px;
+  padding-left: 0;
+  font-size: 1.05rem;
 }
 
 #custom-separator {
-    color: transparent;
-    text-shadow: 0 0 1.5px rgba(12, 12, 12, 0.38);
+  color: transparent;
+  text-shadow: 0 0 1.5px rgba(12, 12, 12, 0.38);
 }
 
 #bluetooth,
 #network,
 #custom-power {
-    padding: 0 6px;
-    transition: all .3s ease;
-    color: @color7;
+  padding: 0 0.6rem;
+  transition: all 0.3s ease;
+  color: @color7;
 }
 
 #bluetooth {
-  font-size: 16px;
+  font-size: 1.09rem;
 }
