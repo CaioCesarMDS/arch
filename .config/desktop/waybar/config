@@ -65,9 +65,6 @@
       "custom/cliphist",
       "custom/colorpicker",
       "custom/bluefilter",
-      "cpu",
-      "memory",
-      "temperature",
       "custom/separator"
     ]
   },
@@ -97,19 +94,6 @@
     "exec": "bash ~/.config/waybar/scripts/hyprsunset_toggle.sh",
     "interval": 1,
     "signal": 1
-  },
-  "cpu": {
-    "format": "󰍛",
-    "tooltip": true
-  },
-  "memory": {
-    "format": " ",
-    "tooltip": true
-  },
-  "temperature": {
-    "critical-threshold": 80,
-    "format": "",
-    "tooltip": true
   },
   "custom/separator": {
     "format": "|",

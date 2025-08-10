@@ -1,16 +1,16 @@
 @import url("../../.cache/wal/colors-waybar.css");
 
 * {
-	all: unset;
+  all: unset;
   font-size: 1.25rem;
   font-family: "JetBrainsMono Nerd Font Mono", "FiraCode Nerd Font", "monospace";
-	border: none;
+  border: none;
 }
 
 .modules-left,
 .modules-center,
 .modules-right {
-  padding: 0.45rem;
+  padding: 0.45rem 0.6rem;
   border-radius: 10px;
   background-color: alpha(@background, 0.6);
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
@@ -30,8 +30,8 @@
 
 tooltip {
   background: @background;
-	border-radius: 8px;
-	border: 1px solid @color7;
+  border-radius: 8px;
+  border: 1px solid @color7;
   color: @color7;
 }
 
@@ -39,9 +39,6 @@ tooltip {
 #clock:hover,
 #custom-cliphist:hover,
 #custom-bluefilter:hover,
-#cpu:hover,
-#memory:hover,
-#temperature:hover,
 #bluetooth:hover,
 #network:hover,
 #custom-power:hover {
@@ -105,7 +102,7 @@ tooltip {
 /* Modules Right */
 
 #custom-expand {
-  padding: 0 0.5rem;
+  padding: 0 0.6rem;
   color: alpha(@foreground, 0.2);
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
   transition: all 0.3s ease;
@@ -118,22 +115,14 @@ tooltip {
 
 #custom-cliphist,
 #custom-colorpicker,
-#custom-bluefilter,
-#cpu,
-#memory,
-#temperature {
-  padding: 0 0.6rem;
+#custom-bluefilter {
+  padding: 0 0.7rem;
   transition: all 0.3s ease;
   color: @color7;
 }
 
 #custom-bluefilter {
-	font-size: 1.3rem;
-}
-
-#temperature {
-  padding-left: 0;
-  font-size: 1.05rem;
+  font-size: 1.3rem;
 }
 
 #custom-separator {
@@ -144,7 +133,7 @@ tooltip {
 #bluetooth,
 #network,
 #custom-power {
-  padding: 0 0.6rem;
+  padding: 0 0.7rem;
   transition: all 0.3s ease;
   color: @color7;
 }

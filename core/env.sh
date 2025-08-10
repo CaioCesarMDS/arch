@@ -2,9 +2,7 @@
 
 set -euo pipefail
 
-THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-source "$THIS_DIR/../utils.sh"
+source "$scrDir/utils/global_func.sh"
 
 export CURRENT_USER=${SUDO_USER:-$USER}
 export USER_HOME=$(eval echo "~$CURRENT_USER")
