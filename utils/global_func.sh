@@ -2,14 +2,6 @@
 
 set -euo pipefail
 
-add_line_if_missing() {
-    local file="$1"
-    local line="$2"
-    if ! grep -qxF "$line" "$file"; then
-        echo "$line" >>"$file"
-    fi
-}
-
 log_info() {
     echo "[INFO] $*"
 }
@@ -18,6 +10,13 @@ log_error() {
     echo "[ERROR] $*" >&2
 }
 
+detect_device_type() {
+    if ls /sys/class/power_supply/ | grep -qi "^BAT"; then
+        echo "laptop"
+    else
+        echo "desktop"
+    fi
+}
 check_root() {
     if [[ "$EUID" -ne 0 ]]; then
         log_error "This script must be run as root (use sudo)"
@@ -36,12 +35,6 @@ run_script() {
     fi
 }
 
-install_packages() {
-    local title="$1"; shift
-    log_info "Installing: $title"
-    pacman -S --noconfirm --needed "$@"
-}
-
 prompt_reboot() {
     log_info "✅ Installation completed successfully."
     read -rp "Reboot now? [y/N]: " ans
@@ -52,4 +45,24 @@ prompt_reboot() {
     fi
 }
 
+install_packages() {
+    local title="$1"
+    shift
+    log_info "Installing: $title"
+    pacman -S --noconfirm --needed "$@"
+}
 
+install_aur_packages() {
+    local title="$1"
+    shift
+    log_info "Installing from AUR: $title"
+    sudo -u "$SUDO_USER" yay -S --noconfirm --needed "$@"
+}
+
+add_line_if_missing() {
+    local file="$1"
+    local line="$2"
+    if ! grep -qxF "$line" "$file"; then
+        echo "$line" >>"$file"
+    fi
+}
