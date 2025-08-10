@@ -6,6 +6,7 @@ scrDir="$(dirname "$(realpath "$0")")"
 
 source "$scrDir/utils/global_func.sh"
 source "$scrDir/core/env.sh"
+source "$scrDir/utils/monitor_info.sh"
 
 CONFIG_SRC="$scrDir/.config"
 CONFIG_DEST="$USER_HOME/.config"
@@ -13,35 +14,32 @@ CONFIG_DEST="$USER_HOME/.config"
 WALLPAPER_SRC="$scrDir/assets/Wallpapers"
 WALLPAPER_DEST="$USER_HOME/Wallpapers"
 
+WAYBAR_CONFIG_DIR="$CONFIG_SRC/waybar"
+SWAYNC_CONFIG_DIR="$CONFIG_SRC/swaync"
+
 DEVICE_TYPE=$(detect_device_type)
 
 copy_configs() {
-    log_info "Copying configuration files to $CONFIG_DEST..."
-
-    if [[ ! -d "$CONFIG_SRC/shared" ]]; then
-        log_error "Shared config directory not found."
-        exit 1
-    fi
+    log_info "Copying configs to $CONFIG_DEST..."
 
     mkdir -p "$CONFIG_DEST"
-    cp -r "$CONFIG_SRC/shared/"* "$CONFIG_DEST/"
+
+    cp -r "$CONFIG_SRC/"* "$CONFIG_DEST/"
 
     if [[ "$DEVICE_TYPE" == "laptop" ]]; then
-        log_info "Copying laptop-specific configuration files..."
-        if [[ -d "$CONFIG_SRC/laptop" ]]; then
-            cp -r "$CONFIG_SRC/laptop/"* "$CONFIG_DEST/"
-        else
-            log_error "Laptop config directory not found."
-            exit 1
+
+        convert_ddcutil_to_brightnessctl "$CONFIG_DEST/hypr/hypridle.conf"
+        replace_monitor_line "$CONFIG_DEST/hypr/hyprland.conf"
+
+        if [[ -d "$CONFIG_SRC/waybar/laptop" ]]; then
+            cp -r "$CONFIG_SRC/waybar/laptop/"* "$CONFIG_DEST/waybar/"
         fi
+        if [[ -d "$CONFIG_SRC/swaync/laptop" ]]; then
+            cp -r "$CONFIG_SRC/swaync/laptop/"* "$CONFIG_DEST/swaync/"
+        fi
+
     else
-        log_info "Copying desktop-specific configuration files..."
-        if [[ -d "$CONFIG_SRC/desktop" ]]; then
-            cp -r "$CONFIG_SRC/desktop/"* "$CONFIG_DEST/"
-        else
-            log_error "Desktop config directory not found."
-            exit 1
-        fi
+        rm -rf "$CONFIG_DEST/waybar/laptop" "$CONFIG_DEST/swaync/laptop"
     fi
 
     chown -R "$CURRENT_USER":"$CURRENT_USER" "$CONFIG_DEST"
