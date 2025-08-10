@@ -2,16 +2,15 @@
 
 * {
     all: unset;
-    font-size: 1.25rem;
-    font-family: "JetBrainsMono Nerd Font Mono", "FiraCode Nerd Font",
-        "monospace";
+    font-size: 1.5rem;
+    font-family: "JetBrainsMono Nerd Font Mono", "FiraCode Nerd Font";
     border: none;
 }
 
 .modules-left,
 .modules-center,
 .modules-right {
-    padding: 0.45rem;
+    padding: 0.45rem 0.6rem;
     border-radius: 10px;
     background-color: alpha(@background, 0.6);
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
@@ -42,8 +41,8 @@ tooltip {
 #custom-bluefilter:hover,
 #bluetooth:hover,
 #network:hover,
-#battery:hover,
-#custom-power:hover {
+#custom-power:hover,
+#battery:hover {
     transition: all 0.3s ease;
     color: @color9;
 }
@@ -104,7 +103,7 @@ tooltip {
 /* Modules Right */
 
 #custom-expand {
-    padding: 0 0.5rem;
+    padding: 0 0.6rem;
     color: alpha(@foreground, 0.2);
     text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
     transition: all 0.3s ease;
@@ -118,7 +117,7 @@ tooltip {
 #custom-cliphist,
 #custom-colorpicker,
 #custom-bluefilter {
-    padding: 0 0.6rem;
+    padding: 0 0.7rem;
     transition: all 0.3s ease;
     color: @color7;
 }
@@ -129,18 +128,26 @@ tooltip {
 
 #custom-separator {
     color: transparent;
-    text-shadow: 0 0 1.5px rgba(12, 12, 12, 0.38);
+    text-shadow: 0 0 1.5px rgba(12, 12, 12, 0.818);
 }
 
 #bluetooth,
 #network,
-#battery,
-#custom-power {
-    padding: 0 0.6rem;
+#custom-power,
+#battery {
+    padding: 0 0.7rem;
     transition: all 0.3s ease;
     color: @color7;
 }
 
 #bluetooth {
     font-size: 1.09rem;
+}
+
+#custom-power {
+    font-size: 1.2rem;
+}
+
+#battery {
+    font-size: 0.9rem;
 }

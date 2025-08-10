@@ -14,8 +14,8 @@
         "group/expand",
         "bluetooth",
         "network",
-        "battery",
-        "custom/power"
+        "custom/power",
+        "battery"
     ],
     "custom/notification": {
         "format": "",
@@ -120,30 +120,32 @@
         "tooltip-format-ethernet": "{ifname} 🖧",
         "on-click": "kitty nmtui"
     },
-    "battery": {
-        "interval": 30,
-        "states": {
-            "good": 95,
-            "warning": 30,
-            "critical": 20
-        },
-        "format": "{capacity}% {icon}",
-        "format-charging": "{capacity}% 󰂄",
-        "format-plugged": "{capacity}% 󰂄 ",
-        "format-alt": "{time} {icon}",
-        "format-icons": [
-            "󰁻",
-            "󰁼",
-            "󰁾",
-            "󰂀",
-            "󰂂",
-            "󰁹"
-        ]
-    },
     "custom/power": {
         "format": "⏻",
         "tooltip": false,
         "on-click": "wlogout -b 2",
         "interval": "once"
+    },
+    "battery": {
+        "interval": 3,
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 20
+        },
+        "format": "{icon} {capacity}% ",
+        "format-charging": "󰂄 {capacity}%",
+        "format-icons": [
+            "󰁺",
+            "󰁻",
+            "󰁼",
+            "󰁽",
+            "󰁾",
+            "󰁿",
+            "󰂀",
+            "󰂁",
+            "󰂂",
+            "󰁹"
+        ]
     }
 }
