@@ -1,11 +1,14 @@
-#!/bin/bash
-WALLPAPER_DIR="$HOME/wallpapers/"
+#!/usr/bin/env sh
+
+WALLPAPER_DIR="$HOME/Wallpapers/"
 
 menu() {
     find "${WALLPAPER_DIR}" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" \) | awk '{print "img:"$0}'
 }
 
 main() {
+    mkdir -p "$WALLPAPER_DIR/active_wallpaper"
+
     choice=$(menu | wofi -c ~/.config/wofi/wallpaper/config -s ~/.config/wofi/wallpaper/style.css --show dmenu --prompt "Select Wallpaper:" -n)
 
     selected_wallpaper=$(echo "$choice" | sed 's/^img://')
@@ -25,6 +28,6 @@ main() {
     # sed -i "s/^gradient_color_2 = .*/gradient_color_2 = '$color2'/" $cava_config
     # pkill -USR2 cava 2>/dev/null
     ext="${selected_wallpaper##*.}"
-    source ~/.cache/wal/colors.sh && cp "$selected_wallpaper" "$HOME/wallpapers/active.$ext"
+    source ~/.cache/wal/colors.sh && cp "$selected_wallpaper" "$HOME/Wallpapers/active_wallpaper/active.$ext"
 }
 main

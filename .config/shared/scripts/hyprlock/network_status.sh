@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 status="$(nmcli general status | grep -oh "\w*connect\w*")"
 
@@ -13,7 +13,7 @@ elif [[ "$status" == "connected" ]]; then
     if [[ "$strength" -eq "0" ]]; then
       printf "󰤯 "
     elif [[ ("$strength" -ge "0") && ("$strength" -le "25") ]]; then
-      printf "󰤟 "  
+      printf "󰤟 "
     elif [[ ("$strength" -ge "25") && ("$strength" -le "50") ]]; then
       printf "󰤢 "
     elif [[ ("$strength" -ge "50") && ("$strength" -le "75") ]]; then

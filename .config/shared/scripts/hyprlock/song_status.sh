@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 player_name=$(playerctl metadata --format '{{playerName}}')
 player_status=$(playerctl status)
@@ -15,4 +15,4 @@ if [[ "$player_status" == "Playing" ]]; then
   fi
 fi
 
-echo "$song_info" 
+echo "$song_info"

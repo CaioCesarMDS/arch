@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 check() {
     command -v "$1" >/dev/null

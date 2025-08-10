@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 LOCKFILE="/tmp/hyprsunset_toggle.lock"
 exec 200>"$LOCKFILE"

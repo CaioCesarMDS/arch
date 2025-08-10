@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
 # status="$(acpi -b | grep -ioh "\w*charging\w*")"
 # level="$(acpi -b | grep -o -P "[0-9]+(?=%)")"
