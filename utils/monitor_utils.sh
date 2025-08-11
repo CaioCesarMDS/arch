@@ -3,7 +3,7 @@
 set -euo pipefail
 
 scrDir="$(dirname "$(realpath "$0")")"
-source "$scrDir/global_func.sh"
+source "$scrDir/utils/global_func.sh"
 
 get_best_monitor() {
     monitors_output=$(hyprctl monitors)
