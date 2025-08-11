@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-scrDir="$(dirname "$(realpath "$0")")"
+SRC_DIR="$(dirname "$(realpath "$0")")"
 
-source "$scrDir/utils/global_func.sh"
+source "$SRC_DIR/utils/global_func.sh"
 
 DEVICE_TYPE=$(detect_device_type)
 
@@ -46,5 +46,3 @@ else
     install_packages "Hyprland desktop-specific packages" \
         ddcutil
 fi
-
-log_info "✅ All packages were installed successfully."
