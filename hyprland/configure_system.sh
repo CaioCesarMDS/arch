@@ -5,7 +5,7 @@ set -euo pipefail
 scrDir="$(dirname "$(realpath "$0")")"
 
 source "$scrDir/utils/global_func.sh"
-source "$scrDir/utils/monitor_info.sh"
+source "$scrDir/utils/monitor_utils.sh"
 source "$scrDir/core/env.sh"
 
 CONFIG_SRC="$scrDir/.config"
@@ -13,19 +13,18 @@ CONFIG_DEST="$USER_HOME/.config"
 
 WALLPAPER_SRC="$scrDir/assets/Wallpapers"
 WALLPAPER_DEST="$USER_HOME/Wallpapers"
+ZSHRC="$USER_HOME/.zshrc"
 
 DEVICE_TYPE=$(detect_device_type)
 
 setup_terminal() {
     log_info "Configuring terminal..."
 
-    mkdir -p "$USER_HOME/.zshrc.backup"
-    cp "$ZSHRC" "$USER_HOME/.zshrc.backup/"
-
-    local ZSHRC="$USER_HOME/.zshrc"
-
     if [ ! -f "$ZSHRC" ]; then
         touch "$ZSHRC"
+    else
+        touch "$USER_HOME/.zshrc.backup"
+        cp "$ZSHRC" "$USER_HOME/.zshrc.backup"
     fi
 
     cat >"$ZSHRC" <<'EOF'
@@ -163,20 +162,8 @@ copy_wallpapers() {
     chown -R "$CURRENT_USER":"$CURRENT_USER" "$WALLPAPER_DEST"
 }
 
-set_wallpaper() {
-    log_info "Setting wallpaper..."
-
-    local wallpaper="$WALLPAPER_DEST/active_wallpaper/active.png"
-
-    swww img "$wallpaper"
-    wal -i "$wallpaper"
-    swaync-client --reload-css
-    pywalfox update
-    source ~/.cache/wal/colors.sh && cp "$wallpaper" "$USER_HOME/Wallpapers/active_wallpaper/active.png"
-}
-
 set_sddm_theme() {
-    log_info "Configurando tema SDDM para Sugar-Candy..."
+    log_info "Configuring SDDM theme..."
 
     local sddm_conf="/etc/sddm.conf"
 
@@ -202,9 +189,9 @@ set_sddm_theme() {
 
     local sddm_backgrounds_dir="/usr/share/sddm/themes/Sugar-Candy/Backgrounds"
     mkdir -p "$sddm_backgrounds_dir"
-    local image="$CONFIG_DEST/Wallpapers/active_wallpaper/active.png"
+    local image_path="$USER_HOME/Wallpapers/active_wallpaper/active.png"
     local image_name="active.png"
-    cp "$image" "$sddm_backgrounds_dir/"
+    cp "$image_path" "$sddm_backgrounds_dir/"
 
     local theme_conf="/usr/share/sddm/themes/Sugar-Candy/theme.conf"
     if [[ ! -f "$theme_conf" ]]; then
@@ -234,7 +221,6 @@ main() {
     setup_terminal
     copy_configs
     copy_wallpapers
-    set_wallpaper
     set_sddm_theme
     enable_sddm
 
