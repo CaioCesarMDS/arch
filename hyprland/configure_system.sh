@@ -165,8 +165,8 @@ set_sddm_theme() {
 
     local sddm_conf="/etc/sddm.conf"
     local sddm_backgrounds_dir="/usr/share/sddm/themes/Sugar-Candy/Backgrounds"
-    local image_path="$USER_HOME/Wallpapers/active_wallpaper/active.png"
-    local image_name="active.png"
+    local image_path="$USER_HOME/Wallpapers/active_wallpaper/active.jpg"
+    local image_name="active.jpg"
     local theme_conf="/usr/share/sddm/themes/Sugar-Candy/theme.conf"
 
     # Backup sddm.conf
