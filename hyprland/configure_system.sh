@@ -5,6 +5,7 @@ set -euo pipefail
 scrDir="$(dirname "$(realpath "$0")")"
 
 source "$scrDir/utils/global_func.sh"
+source "$scrDir/utils/monitor_info.sh"
 source "$scrDir/core/env.sh"
 
 CONFIG_SRC="$scrDir/.config"
@@ -15,33 +16,135 @@ WALLPAPER_DEST="$USER_HOME/Wallpapers"
 
 DEVICE_TYPE=$(detect_device_type)
 
-copy_configs() {
-    log_info "Copying configuration files to $CONFIG_DEST..."
+setup_terminal() {
+    log_info "Configuring terminal..."
 
-    if [[ ! -d "$CONFIG_SRC/shared" ]]; then
-        log_error "Shared config directory not found."
-        exit 1
+    mkdir -p "$USER_HOME/.zshrc.backup"
+    cp "$ZSHRC" "$USER_HOME/.zshrc.backup/"
+
+    local ZSHRC="$USER_HOME/.zshrc"
+
+    if [ ! -f "$ZSHRC" ]; then
+        touch "$ZSHRC"
     fi
 
+    cat >"$ZSHRC" <<'EOF'
+            export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+
+            # ------------------------
+            # Zinit (Plugin Manager)
+            # ------------------------
+            ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+            [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+            [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+            source "${ZINIT_HOME}/zinit.zsh"
+
+            # ------------------------
+            # Plugins and Snippets
+            # ------------------------
+            zinit light zsh-users/zsh-autosuggestions
+            zinit light zsh-users/zsh-completions
+            zinit light zsh-users/zsh-syntax-highlighting
+
+            zinit light Aloxaf/fzf-tab
+
+            zinit snippet OMZP::git
+            zinit snippet OMZP::sudo
+            zinit snippet OMZP::archlinux
+
+            # ------------------------
+            # Plugins Configuration
+            # ------------------------
+            HISTSIZE=10000
+            HISTFILE="$HOME/.zsh_history"
+            SAVEHIST=HISTSIZE
+            HISTDUP=erase
+            setopt append_history
+            setopt share_history
+            setopt hist_ignore_all_dups
+            setopt hist_ignore_dups
+            setopt hist_save_no_dups
+            setopt hist_ignore_space
+            setopt hist_find_no_dups
+
+            # Completion Style
+            zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+            zstyle ':completion:*' menu no
+            zstyle ':fzf-tab:completion:cd:*' fzf-preview use-cache 'ls --color $realpath'
+
+            # Starship prompt
+            eval "$(starship init zsh)"
+
+            # Set up fzf
+            source <(fzf --zsh)
+
+            export FZF_DEFAULT_OPTS="
+                --height 40%
+                --layout=reverse
+                --border
+                --color=fg:#c0caf5,bg:#1a1b26,hl:#7aa2f7
+                --color=fg+:#c0caf5,bg+:#1f2335,hl+:#7dcfff
+                --color=info:#7dcfff,prompt:#7aa2f7,pointer:#f7768e
+                --color=marker:#9ece6a,spinner:#9ece6a,header:#bb9af7
+            "
+
+            export FZF_CTRL_R_OPTS="--style full"
+
+            export FZF_CTRL_T_OPTS="
+                --style full
+                --walker-skip .git,node_modules,target
+                --preview 'bat -n --color=always {}'
+                --bind 'ctrl-/:change-preview-window(down|hidden|)'
+            "
+
+            # ------------------------
+            # Aliases
+            # ------------------------
+            alias cat="bat"
+            alias l="ls -la"
+            alias ls="eza --icons=always --color=always --long --git --no-filesize --no-time --no-user --no-permissions"
+            alias cd="z"
+
+            # Set up zoxide
+            eval "$(zoxide init zsh)"
+
+            # Update System Packages and Tools
+            dev-update() {
+                echo "🛠️ Updating system tools..."
+                sudo pacman -Syu --noconfirm
+                yay -Syu --noconfirm
+                zinit self-update && zinit update --all
+                echo "🎉 Everything's fresh and clean!"
+            }
+
+            # Pywal (terminal colors)
+            (cat ~/.cache/wal/sequences &)
+            source ~/.cache/wal/colors-tty.sh
+EOF
+}
+
+copy_configs() {
+    log_info "Copying configs to $CONFIG_DEST..."
+
     mkdir -p "$CONFIG_DEST"
-    cp -r "$CONFIG_SRC/shared/"* "$CONFIG_DEST/"
+
+    cp -r "$CONFIG_SRC/"* "$CONFIG_DEST/"
+
+    replace_monitor_line "$CONFIG_DEST/hypr/hyprland.conf"
 
     if [[ "$DEVICE_TYPE" == "laptop" ]]; then
-        log_info "Copying laptop-specific configuration files..."
-        if [[ -d "$CONFIG_SRC/laptop" ]]; then
-            cp -r "$CONFIG_SRC/laptop/"* "$CONFIG_DEST/"
-        else
-            log_error "Laptop config directory not found."
-            exit 1
+
+        convert_ddcutil_to_brightnessctl "$CONFIG_DEST/hypr/hypridle.conf"
+
+        if [[ -d "$CONFIG_SRC/waybar/laptop" ]]; then
+            cp -r "$CONFIG_SRC/waybar/laptop/"* "$CONFIG_DEST/waybar/"
         fi
+        if [[ -d "$CONFIG_SRC/swaync/laptop" ]]; then
+            cp -r "$CONFIG_SRC/swaync/laptop/"* "$CONFIG_DEST/swaync/"
+        fi
+
     else
-        log_info "Copying desktop-specific configuration files..."
-        if [[ -d "$CONFIG_SRC/desktop" ]]; then
-            cp -r "$CONFIG_SRC/desktop/"* "$CONFIG_DEST/"
-        else
-            log_error "Desktop config directory not found."
-            exit 1
-        fi
+        rm -rf "$CONFIG_DEST/waybar/laptop" "$CONFIG_DEST/swaync/laptop"
     fi
 
     chown -R "$CURRENT_USER":"$CURRENT_USER" "$CONFIG_DEST"
@@ -60,6 +163,66 @@ copy_wallpapers() {
     chown -R "$CURRENT_USER":"$CURRENT_USER" "$WALLPAPER_DEST"
 }
 
+set_wallpaper() {
+    log_info "Setting wallpaper..."
+
+    local wallpaper="$WALLPAPER_DEST/active_wallpaper/active.png"
+
+    swww img "$wallpaper"
+    wal -i "$wallpaper"
+    swaync-client --reload-css
+    pywalfox update
+    source ~/.cache/wal/colors.sh && cp "$wallpaper" "$USER_HOME/Wallpapers/active_wallpaper/active.png"
+}
+
+set_sddm_theme() {
+    log_info "Configurando tema SDDM para Sugar-Candy..."
+
+    local sddm_conf="/etc/sddm.conf"
+
+    if [[ ! -f "$sddm_conf" ]]; then
+        echo "[Theme]" >"$sddm_conf"
+        echo "Current=Sugar-Candy" >>"$sddm_conf"
+    else
+        if ! grep -q '^\[Theme\]' "$sddm_conf"; then
+            {
+                echo ""
+                echo "[Theme]"
+                echo "Current=Sugar-Candy"
+            } >>"$sddm_conf"
+        else
+            # Ajusta ou adiciona Current=
+            if grep -q '^Current=' "$sddm_conf"; then
+                sed -i 's/^Current=.*/Current=Sugar-Candy/' "$sddm_conf"
+            else
+                sed -i '/^\[Theme\]/a Current=Sugar-Candy' "$sddm_conf"
+            fi
+        fi
+    fi
+
+    local sddm_backgrounds_dir="/usr/share/sddm/themes/Sugar-Candy/Backgrounds"
+    mkdir -p "$sddm_backgrounds_dir"
+    local image="$CONFIG_DEST/Wallpapers/active_wallpaper/active.png"
+    local image_name="active.png"
+    cp "$image" "$sddm_backgrounds_dir/"
+
+    local theme_conf="/usr/share/sddm/themes/Sugar-Candy/theme.conf"
+    if [[ ! -f "$theme_conf" ]]; then
+        log_error "File $theme_conf not found."
+        exit 1
+    fi
+
+    if grep -q '^Background=' "$theme_conf"; then
+        sed -i "s|^Background=.*|Background=\"Backgrounds/$image_name\"|" "$theme_conf"
+    else
+        echo "Background=\"Backgrounds/$image_name\"" >>"$theme_conf"
+    fi
+
+    chown "$CURRENT_USER":"$CURRENT_USER" "/usr/share/sddm/themes/Sugar-Candy/Backgrounds"
+
+    log_info "SDDM Theme configured successfully."
+}
+
 enable_sddm() {
     log_info "Enabling SDDM service..."
     systemctl enable sddm.service
@@ -68,8 +231,11 @@ enable_sddm() {
 main() {
     log_info "Starting Hyprland configuration..."
 
+    setup_terminal
     copy_configs
     copy_wallpapers
+    set_wallpaper
+    set_sddm_theme
     enable_sddm
 
     log_info "✅ Hyprland configuration completed successfully."

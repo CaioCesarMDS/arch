@@ -1,0 +1,153 @@
+@import url("../../.cache/wal/colors-waybar.css");
+
+* {
+    all: unset;
+    font-size: 1.5rem;
+    font-family: "JetBrainsMono Nerd Font Mono", "FiraCode Nerd Font";
+    border: none;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+    padding: 0.45rem 0.6rem;
+    border-radius: 10px;
+    background-color: alpha(@background, 0.6);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+}
+
+.modules-left {
+    margin: 0.4rem 0 0.5rem 0.6rem;
+}
+
+.modules-center {
+    margin: 0.4rem 0 0.5rem 0;
+}
+
+.modules-right {
+    margin: 0.4rem 0.5rem 0.6rem 0;
+}
+
+tooltip {
+    background: @background;
+    border-radius: 8px;
+    border: 1px solid @color7;
+    color: @color7;
+}
+
+#custom-notification:hover,
+#clock:hover,
+#custom-cliphist:hover,
+#custom-bluefilter:hover,
+#bluetooth:hover,
+#network:hover,
+#custom-power:hover,
+#battery:hover {
+    transition: all 0.3s ease;
+    color: @color9;
+}
+
+/* Modules Left */
+
+#custom-notification,
+#clock,
+#tray {
+    padding: 0 0.6rem;
+    transition: all 0.3s ease;
+    color: @color7;
+}
+
+#clock {
+    font-size: 1rem;
+}
+
+/* Modules Center */
+
+#workspaces {
+    padding: 0 0.7rem;
+}
+
+#workspaces button {
+    padding: 0 0.4rem;
+    color: alpha(@color9, 0.4);
+    transition: all 0.2s ease;
+}
+
+#workspaces button:hover {
+    color: rgba(0, 0, 0, 0);
+    text-shadow: 0 0 1.5px rgba(0, 0, 0, 0.5);
+    transition: all 0.5s ease;
+}
+
+#workspaces button.active {
+    color: @color9;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+#workspaces button.empty {
+    color: rgba(0, 0, 0, 0);
+    text-shadow: 0 0 1.5px rgba(0, 0, 0, 0.2);
+}
+
+#workspaces button.empty:hover {
+    color: rgba(0, 0, 0, 0);
+    text-shadow: 0 0 1.5px rgba(0, 0, 0, 0.5);
+    transition: all 1s ease;
+}
+
+#workspaces button.empty.active {
+    color: @color9;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Modules Right */
+
+#custom-expand {
+    padding: 0 0.6rem;
+    color: alpha(@foreground, 0.2);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
+    transition: all 0.3s ease;
+}
+
+#custom-expand:hover {
+    color: rgba(255, 255, 255, 0.2);
+    text-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+#custom-cliphist,
+#custom-colorpicker,
+#custom-bluefilter {
+    padding: 0 0.7rem;
+    transition: all 0.3s ease;
+    color: @color7;
+}
+
+#custom-bluefilter {
+    font-size: 1.3rem;
+}
+
+#custom-separator {
+    color: transparent;
+    text-shadow: 0 0 1.5px rgba(12, 12, 12, 0.818);
+}
+
+#bluetooth,
+#network,
+#custom-power,
+#battery {
+    padding: 0 0.7rem;
+    transition: all 0.3s ease;
+    color: @color7;
+}
+
+#bluetooth {
+    font-size: 1.09rem;
+}
+
+#custom-power {
+    font-size: 1.2rem;
+}
+
+#battery {
+    font-size: 0.9rem;
+}
