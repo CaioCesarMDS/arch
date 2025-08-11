@@ -65,7 +65,14 @@ setup_terminal() {
             setopt hist_ignore_space
             setopt hist_find_no_dups
 
-            # Completion Style
+            # -------------------------
+            # Completion Fix & Style
+            # -------------------------
+            if [ ! -f ~/.zcompdump ] || grep -q "_complete" ~/.zcompdump 2>/dev/null; then
+                rm -f ~/.zcompdump*
+            fi
+            autoload -U compinit && compinit -C
+
             zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
             zstyle ':completion:*' menu no
             zstyle ':fzf-tab:completion:cd:*' fzf-preview use-cache 'ls --color $realpath'

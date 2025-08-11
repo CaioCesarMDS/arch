@@ -52,7 +52,7 @@ install_grub_theme() {
     local grub_theme_dir="/usr/share/grub/themes"
     local grub_cfg="/boot/grub/grub.cfg"
     local grub_default="/etc/default/grub"
-    local default_gfxmode="1280x1024x32,auto"
+    local default_gfxmode="1920x1080x32,auto"
     local themes_available=("$SRC_DIR"/assets/grub/*.tar.*)
 
     # Check if any themes are available
@@ -104,21 +104,16 @@ install_grub_theme() {
     local top_entry=$(tar $tar_flags -tf "$chosen_theme" 2>/dev/null | sed -n '1p' || true)
     local theme_dir_name=$(printf '%s' "$top_entry" | cut -d'/' -f1)
 
+    rm -rf "$grub_theme_dir/"*
+
     # Extract the theme files
-    echo "tar_flags value: $tar_flags"
     if ! tar "${tar_flags[@]}" -xf "$chosen_theme" -C "$grub_theme_dir"; then
         log_error "Failed to extract $chosen_theme"
         exit 1
     fi
 
     # Identify the theme directory
-    local target_dir
-    target_dir=$(find "$grub_theme_dir" -maxdepth 2 -type f -name theme.txt -printf '%h\n' | head -n1)
-
-    if [[ -z "$target_dir" ]]; then
-        log_error "Not possible to identify theme directory (looking for theme.txt)."
-        exit 1
-    fi
+    local target_dir="$grub_theme_dir/$theme_dir_name"
 
     if [[ ! -f "$target_dir/theme.txt" ]]; then
         log_error "theme.txt not found in: $target_dir"
