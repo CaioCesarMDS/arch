@@ -58,11 +58,3 @@ install_aur_packages() {
     log_info "Installing from AUR: $title"
     sudo -u "$SUDO_USER" yay -S --noconfirm --needed "$@"
 }
-
-add_line_if_missing() {
-    local file="$1"
-    local line="$2"
-    if ! grep -qxF "$line" "$file"; then
-        echo "$line" >>"$file"
-    fi
-}

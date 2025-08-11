@@ -3,7 +3,7 @@
 WALLPAPER_DIR="$HOME/Wallpapers/"
 
 menu() {
-    find "${WALLPAPER_DIR}" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" \) | awk '{print "img:"$0}'
+    find "${WALLPAPER_DIR}" -path "${WALLPAPER_DIR}active_wallpaper" -prune -o -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.gif" \) -print | awk '{print "img:"$0}'
 }
 
 main() {
@@ -28,6 +28,8 @@ main() {
     # sed -i "s/^gradient_color_2 = .*/gradient_color_2 = '$color2'/" $cava_config
     # pkill -USR2 cava 2>/dev/null
     ext="${selected_wallpaper##*.}"
-    source ~/.cache/wal/colors.sh && cp "$selected_wallpaper" "$HOME/Wallpapers/active_wallpaper/active.$ext"
+    cp "$selected_wallpaper" "$HOME/Wallpapers/active_wallpaper/active.$ext"
+    cp "$selected_wallpaper" "/usr/share/sddm/themes/Sugar-Candy/Backgrounds/active.$ext"
+    source ~/.cache/wal/colors.sh
 }
 main

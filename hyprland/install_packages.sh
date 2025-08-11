@@ -17,14 +17,14 @@ install_common_packages() {
         xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
 
     install_packages "System utilities" \
-        firefox discord steam clapper cliphist gnome-keyring nautilus loupe \
-        pavucontrol pamixer swaync waybar wofi wl-clipboard
+        clapper cliphist discord firefox gnome-keyring nautilus loupe \
+        pavucontrol pamixer steam starship swaync waybar wofi wl-clipboard
 
-    install_packages "audio/video codecs" \
+    install_packages "Audio/Video codecs" \
         ffmpeg gst-plugins-ugly gst-plugins-good gst-plugins-base \
         gst-plugins-bad gst-libav gstreamer
 
-    install_packages "fonts" \
+    install_packages "Fonts" \
         noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra \
         ttf-firacode-nerd ttf-font-awesome ttf-jetbrains-mono \
         ttf-jetbrains-mono-nerd ttf-liberation ttf-meslo-nerd
