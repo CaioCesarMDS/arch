@@ -2,20 +2,22 @@
 
 set -euo pipefail
 
-source "$scrDir/utils/global_func.sh"
-source "$scrDir/core/env.sh"
+SRC_DIR="$(dirname "$(realpath "$0")")"
+
+source "$SRC_DIR/utils/global_func.sh"
+source "$SRC_DIR/core/env.sh"
 
 install_grub() {
     log_info "Installing GRUB bootloader..."
 
-    EFI_DIR="/boot/efi"
-    if [[ ! -d "$EFI_DIR" ]]; then
-        log_error "EFI directory $EFI_DIR not found."
+    local efi_dir="/boot/efi"
+    if [[ ! -d "$efi_dir" ]]; then
+        log_error "$efi_dir not found."
         exit 1
     fi
 
-    if [[ ! -f "$EFI_DIR/EFI/GRUB/grubx64.efi" ]]; then
-        grub-install --target=x86_64-efi --efi-directory="$EFI_DIR" --bootloader-id=ARCH --recheck
+    if [[ ! -f "$efi_dir/EFI/GRUB/grubx64.efi" ]]; then
+        grub-install --target=x86_64-efi --efi-directory="$efi_dir" --bootloader-id=ARCH --recheck
     else
         log_info "GRUB already installed, skipping."
     fi
@@ -24,54 +26,98 @@ install_grub() {
 configure_grub() {
     log_info "Configuring GRUB to detect other operating systems..."
 
-    GRUB_FILE="/etc/default/grub"
-    if [[ ! -f "$GRUB_FILE" ]]; then
-        log_error "$GRUB_FILE not found."
+    local grub_file="/etc/default/grub"
+    if [[ ! -f "$grub_file" ]]; then
+        log_error "$grub_file not found."
         exit 1
     fi
 
     if [[ -x "$(command -v os-prober)" ]]; then
-        if grep -q "^#*GRUB_DISABLE_OS_PROBER=" "$GRUB_FILE"; then
-            sed -i 's/^#*GRUB_DISABLE_OS_PROBER=.*/GRUB_DISABLE_OS_PROBER=false/' "$GRUB_FILE"
+        if grep -q "^#*GRUB_DISABLE_OS_PROBER=" "$grub_file"; then
+            sed -i 's/^#*GRUB_DISABLE_OS_PROBER=.*/GRUB_DISABLE_OS_PROBER=false/' "$grub_file"
         else
-            echo "GRUB_DISABLE_OS_PROBER=false" >>"$GRUB_FILE"
+            echo "GRUB_DISABLE_OS_PROBER=false" >>"$grub_file"
         fi
     else
-        log_info "os-prober not found. Skipping multi-OS detection config."
+        log_info "OS-Prober not found. Skipping multi-OS detection config."
     fi
 
     grub-mkconfig -o /boot/grub/grub.cfg
 }
 
 install_grub_theme() {
-    grub_theme="$scrDir/assets/grub/Grub_Retroboot.tar.gz"
     log_info "Installing GRUB theme..."
 
-    if [[ ! -f "$grub_theme" ]]; then
-        log_error "Grub theme not found: $grub_theme"
+    # Define variables
+    local grub_theme_dir="/usr/share/grub/themes"
+    local grub_cfg="/boot/grub/grub.cfg"
+    local grub_default="/etc/default/grub"
+    local default_gfxmode="1280x1024x32,auto"
+    local themes_available=("$SRC_DIR"/assets/grub/*.tar.*)
+
+    # Check if any themes are available
+    if ((${#themes_available[@]} == 0)); then
+        log_error "No GRUB themes found in $SRC_DIR/assets/grub/"
         exit 1
     fi
 
-    mkdir -p /usr/share/grub/themes
+    # Create menu items
+    local menu_items=()
+    for file in "${themes_available[@]}"; do
+        filename=$(basename "$file")
+        filename="${filename%.tar.*}"
+        menu_items+=("$filename")
+    done
+    menu_items+=("None (do not install theme)")
 
-    top_entry=$(tar -tzf "$grub_theme" 2>/dev/null | sed -n '1p' || true)
-    theme_dir_name=$(printf '%s' "$top_entry" | cut -d'/' -f1)
-
-    if ! tar -xzf "$grub_theme" -C /usr/share/grub/themes/; then
-        log_error "Failed to extract $grub_theme"
-        exit 1
-    fi
-
-    if [[ -n "$theme_dir_name" && -d "/usr/share/grub/themes/$theme_dir_name" ]]; then
-        target_dir="/usr/share/grub/themes/$theme_dir_name"
-    else
-        possible=$(find /usr/share/grub/themes -maxdepth 2 -type f -name theme.txt -printf '%h\n' 2>/dev/null | head -n1 || true)
-        if [[ -n "$possible" ]]; then
-            target_dir="$possible"
+    # Prompt user for theme selection
+    echo "Choose a theme to install:"
+    local choice
+    select choice in "${menu_items[@]}"; do
+        if [[ -n "$choice" ]]; then
+            break
         else
-            log_error "Not possible to identify theme directory (looking for theme.txt)."
-            exit 1
+            echo "Invalid option."
         fi
+    done
+
+    # Check if user selected a theme
+    if [[ "$choice" == "None (do not install theme)" ]]; then
+        log_info "GRUB theme installation skipped."
+        return
+    fi
+
+    # Identify the theme file
+    local chosen_theme="${themes_available[$((REPLY - 1))]}"
+
+    if [[ ! -f "$chosen_theme" ]]; then
+        log_error "Theme file not found: $chosen_theme"
+        exit 1
+    fi
+
+    mkdir -p "$grub_theme_dir"
+
+    # Detect the tar command flags
+    local tar_flags=($(detect_tar_flag "$chosen_theme"))
+
+    # Identify the top entry in the theme archive
+    local top_entry=$(tar $tar_flags -tf "$chosen_theme" 2>/dev/null | sed -n '1p' || true)
+    local theme_dir_name=$(printf '%s' "$top_entry" | cut -d'/' -f1)
+
+    # Extract the theme files
+    echo "tar_flags value: $tar_flags"
+    if ! tar "${tar_flags[@]}" -xf "$chosen_theme" -C "$grub_theme_dir"; then
+        log_error "Failed to extract $chosen_theme"
+        exit 1
+    fi
+
+    # Identify the theme directory
+    local target_dir
+    target_dir=$(find "$grub_theme_dir" -maxdepth 2 -type f -name theme.txt -printf '%h\n' | head -n1)
+
+    if [[ -z "$target_dir" ]]; then
+        log_error "Not possible to identify theme directory (looking for theme.txt)."
+        exit 1
     fi
 
     if [[ ! -f "$target_dir/theme.txt" ]]; then
@@ -79,41 +125,33 @@ install_grub_theme() {
         exit 1
     fi
 
-    log_info "Theme installed in: $target_dir"
+    # Backup current GRUB configuration
+    cp "$grub_default" "$grub_default.bak.$(date +%s)"
+    log_info "Backup of $grub_default created."
 
-    cp /etc/default/grub /etc/default/grub.bak."$(date +%s)"
-    log_info "Backup of /etc/default/grub created."
+    # Define option in $grub_default
+    {
+        grep -q '^GRUB_DEFAULT=' "$grub_default" &&
+            sed -i 's/^GRUB_DEFAULT=.*/GRUB_DEFAULT=saved/' "$grub_default" ||
+            echo 'GRUB_DEFAULT=saved' >>"$grub_default"
 
-    if grep -q '^GRUB_DEFAULT=' /etc/default/grub; then
-        sed -i 's/^GRUB_DEFAULT=.*/GRUB_DEFAULT=saved/' /etc/default/grub
-    else
-        echo 'GRUB_DEFAULT=saved' | tee -a /etc/default/grub >/dev/null
-    fi
+        grep -q '^GRUB_GFXMODE=' "$grub_default" &&
+            sed -i "s|^GRUB_GFXMODE=.*|GRUB_GFXMODE=$default_gfxmode|" "$grub_default" ||
+            echo "GRUB_GFXMODE=$default_gfxmode" >>"$grub_default"
 
-    if grep -q '^GRUB_GFXMODE=' /etc/default/grub; then
-        sed -i 's/^GRUB_GFXMODE=.*/GRUB_GFXMODE=1280x1024x32,auto/' /etc/default/grub
-    else
-        echo 'GRUB_GFXMODE=1280x1024x32,auto' | tee -a /etc/default/grub >/dev/null
-    fi
+        grep -q '^GRUB_THEME=' "$grub_default" &&
+            sed -i "s|^GRUB_THEME=.*|GRUB_THEME=\"$target_dir/theme.txt\"|" "$grub_default" ||
+            echo "GRUB_THEME=\"$target_dir/theme.txt\"" >>"$grub_default"
 
-    grub_theme_line="GRUB_THEME=\"${target_dir}/theme.txt\""
-    if grep -q '^GRUB_THEME=' /etc/default/grub; then
-        sed -i "s|^GRUB_THEME=.*|${grub_theme_line}|" /etc/default/grub
-    else
-        echo "${grub_theme_line}" | tee -a /etc/default/grub >/dev/null
-    fi
+        grep -q '^GRUB_SAVEDEFAULT=' "$grub_default" &&
+            sed -i 's/^GRUB_SAVEDEFAULT=.*/GRUB_SAVEDEFAULT=true/' "$grub_default" ||
+            echo 'GRUB_SAVEDEFAULT=true' >>"$grub_default"
+    }
 
-    if grep -q '^GRUB_SAVEDEFAULT=' /etc/default/grub; then
-        sed -i 's/^GRUB_SAVEDEFAULT=.*/GRUB_SAVEDEFAULT=true/' /etc/default/grub
-    else
-        echo 'GRUB_SAVEDEFAULT=true' | tee -a /etc/default/grub >/dev/null
-    fi
-
-    log_info "File /etc/default/grub updated. Regenerating grub.cfg..."
-
-    if ! grub-mkconfig -o /boot/grub/grub.cfg; then
-        log_error "Failed to generate /boot/grub/grub.cfg"
-        return 1
+    # Regenerate GRUB configuration
+    if ! grub-mkconfig -o "$grub_cfg"; then
+        log_error "Failed to generate $grub_cfg"
+        exit 1
     fi
 
     log_info "GRUB updated with theme: $target_dir"
@@ -130,16 +168,16 @@ enable_services() {
 configure_pacman() {
     log_info "Configuring pacman for parallel downloads..."
 
-    PACMAN_FILE="/etc/pacman.conf"
-    if [[ ! -f "$PACMAN_FILE" ]]; then
-        log_error "$PACMAN_FILE not found."
+    local pacman_file="/etc/pacman.conf"
+    if [[ ! -f "$pacman_file" ]]; then
+        log_error "$pacman_file not found."
         exit 1
     fi
 
-    if grep -q "^[#]*ParallelDownloads" "$PACMAN_FILE"; then
-        sed -i 's/^[#]*ParallelDownloads.*/ParallelDownloads = 10/' "$PACMAN_FILE"
+    if grep -q "^[#]*ParallelDownloads" "$pacman_file"; then
+        sed -i 's/^[#]*ParallelDownloads.*/ParallelDownloads = 10/' "$pacman_file"
     else
-        sed -i '/^\[options\]/a ParallelDownloads = 10' "$PACMAN_FILE"
+        sed -i '/^\[options\]/a ParallelDownloads = 10' "$pacman_file"
     fi
 }
 

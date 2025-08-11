@@ -2,7 +2,9 @@
 
 set -euo pipefail
 
-source "$scrDir/utils/global_func.sh"
+SRC_DIR="$(dirname "$(realpath "$0")")"
+
+source "$SRC_DIR/utils/global_func.sh"
 
 export CURRENT_USER=${SUDO_USER:-$USER}
 export USER_HOME=$(eval echo "~$CURRENT_USER")

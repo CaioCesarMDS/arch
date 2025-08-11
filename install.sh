@@ -2,19 +2,14 @@
 
 set -euo pipefail
 
-export scrDir="$(dirname "$(realpath "$0")")"
+SRC_DIR="$(dirname "$(realpath "$0")")"
 
-source "$scrDir/utils/global_func.sh"
-
-update_system() {
-    log_info "Updating the system..."
-    pacman -Syu --noconfirm
-}
+source "$SRC_DIR/utils/global_func.sh"
 
 main() {
-    echo -e "\n======================================"
-    echo "  🚀 Starting Arch Linux Setup + Hyprland"
-    echo -e "========================================\n"
+    echo -e "\n==========================================="
+    echo "     🚀 Starting Arch Linux Setup + Hyprland"
+    echo -e "=============================================\n"
 
     check_root
     update_system

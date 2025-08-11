@@ -2,12 +2,16 @@
 
 set -euo pipefail
 
-source "$scrDir/utils/global_func.sh"
+SRC_DIR="$(dirname "$(realpath "$0")")"
+
+source "$SRC_DIR/utils/global_func.sh"
+
+PROCESSOR=$(cpu_info)
 
 log_info "Installing essential packages for Arch"
 
 install_packages "system base" \
-    base base-devel efibootmgr grub fuse3 intel-ucode linux linux-firmware \
+    base base-devel efibootmgr grub fuse3 ${PROCESSOR}-ucode linux linux-firmware \
     linux-headers make networkmanager pipewire pipewire-pulse os-prober \
     xdg-user-dirs wireplumber
 

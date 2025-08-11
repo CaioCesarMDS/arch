@@ -2,16 +2,16 @@
 
 set -euo pipefail
 
-scrDir="$(dirname "$(realpath "$0")")"
+SRC_DIR="$(dirname "$(realpath "$0")")"
 
-source "$scrDir/utils/global_func.sh"
-source "$scrDir/utils/monitor_utils.sh"
-source "$scrDir/core/env.sh"
+source "$SRC_DIR/utils/global_func.sh"
+source "$SRC_DIR/utils/monitor_utils.sh"
+source "$SRC_DIR/core/env.sh"
 
-CONFIG_SRC="$scrDir/.config"
+CONFIG_SRC="$SRC_DIR/.config"
 CONFIG_DEST="$USER_HOME/.config"
 
-WALLPAPER_SRC="$scrDir/assets/Wallpapers"
+WALLPAPER_SRC="$SRC_DIR/assets/Wallpapers"
 WALLPAPER_DEST="$USER_HOME/Wallpapers"
 ZSHRC="$USER_HOME/.zshrc"
 
@@ -20,11 +20,10 @@ DEVICE_TYPE=$(detect_device_type)
 setup_terminal() {
     log_info "Configuring terminal..."
 
-    if [ ! -f "$ZSHRC" ]; then
-        touch "$ZSHRC"
+    if [[ -f "$ZSHRC" ]]; then
+        cp "$ZSHRC" "$USER_HOME/.zshrc.bak"
     else
-        touch "$USER_HOME/.zshrc.backup"
-        cp "$ZSHRC" "$USER_HOME/.zshrc.backup"
+        touch "$ZSHRC"
     fi
 
     cat >"$ZSHRC" <<'EOF'
@@ -71,8 +70,15 @@ setup_terminal() {
             zstyle ':completion:*' menu no
             zstyle ':fzf-tab:completion:cd:*' fzf-preview use-cache 'ls --color $realpath'
 
+            # Pywal (terminal colors)
+            (cat ~/.cache/wal/sequences &)
+            source ~/.cache/wal/colors-tty.sh
+
             # Starship prompt
             eval "$(starship init zsh)"
+
+            # Set up zoxide
+            eval "$(zoxide init zsh)"
 
             # Set up fzf
             source <(fzf --zsh)
@@ -96,29 +102,21 @@ setup_terminal() {
                 --bind 'ctrl-/:change-preview-window(down|hidden|)'
             "
 
-            # ------------------------
-            # Aliases
-            # ------------------------
-            alias cat="bat"
-            alias l="ls -la"
-            alias ls="eza --icons=always --color=always --long --git --no-filesize --no-time --no-user --no-permissions"
-            alias cd="z"
-
-            # Set up zoxide
-            eval "$(zoxide init zsh)"
-
             # Update System Packages and Tools
             dev-update() {
                 echo "🛠️ Updating system tools..."
                 sudo pacman -Syu --noconfirm
                 yay -Syu --noconfirm
                 zinit self-update && zinit update --all
-                echo "🎉 Everything's fresh and clean!"
+                echo "🎉 Everything's is up to date!"
             }
 
-            # Pywal (terminal colors)
-            (cat ~/.cache/wal/sequences &)
-            source ~/.cache/wal/colors-tty.sh
+            # ------------------------
+            # Aliases
+            # ------------------------
+            alias l="ls -la"
+            alias ls="eza --icons=always --color=always --long --git --no-filesize --no-time --no-user --no-permissions"
+            alias cd="z"
 EOF
 }
 
@@ -126,22 +124,15 @@ copy_configs() {
     log_info "Copying configs to $CONFIG_DEST..."
 
     mkdir -p "$CONFIG_DEST"
-
     cp -r "$CONFIG_SRC/"* "$CONFIG_DEST/"
 
     replace_monitor_line "$CONFIG_DEST/hypr/hyprland.conf"
 
     if [[ "$DEVICE_TYPE" == "laptop" ]]; then
-
         convert_ddcutil_to_brightnessctl "$CONFIG_DEST/hypr/hypridle.conf"
 
-        if [[ -d "$CONFIG_SRC/waybar/laptop" ]]; then
-            cp -r "$CONFIG_SRC/waybar/laptop/"* "$CONFIG_DEST/waybar/"
-        fi
-        if [[ -d "$CONFIG_SRC/swaync/laptop" ]]; then
-            cp -r "$CONFIG_SRC/swaync/laptop/"* "$CONFIG_DEST/swaync/"
-        fi
-
+        [[ -d "$CONFIG_SRC/waybar/laptop" ]] && cp -r "$CONFIG_SRC/waybar/laptop/"* "$CONFIG_DEST/waybar/"
+        [[ -d "$CONFIG_SRC/swaync/laptop" ]] && cp -r "$CONFIG_SRC/swaync/laptop/"* "$CONFIG_DEST/swaync/"
     else
         rm -rf "$CONFIG_DEST/waybar/laptop" "$CONFIG_DEST/swaync/laptop"
     fi
@@ -166,46 +157,45 @@ set_sddm_theme() {
     log_info "Configuring SDDM theme..."
 
     local sddm_conf="/etc/sddm.conf"
+    local sddm_backgrounds_dir="/usr/share/sddm/themes/Sugar-Candy/Backgrounds"
+    local image_path="$USER_HOME/Wallpapers/active_wallpaper/active.png"
+    local image_name="active.png"
+    local theme_conf="/usr/share/sddm/themes/Sugar-Candy/theme.conf"
 
-    if [[ ! -f "$sddm_conf" ]]; then
-        echo "[Theme]" >"$sddm_conf"
-        echo "Current=Sugar-Candy" >>"$sddm_conf"
+    # Backup sddm.conf
+    if [[ -f "$sddm_conf" ]]; then
+        cp "$sddm_conf" "${sddm_conf}.bak"
+    fi
+
+    if [[ ! -f "$sddm_conf" ]] || ! grep -q '^\[Theme\]' "$sddm_conf"; then
+        {
+            echo ""
+            echo "[Theme]"
+            echo "Current=Sugar-Candy"
+        } >>"$sddm_conf"
     else
-        if ! grep -q '^\[Theme\]' "$sddm_conf"; then
-            {
-                echo ""
-                echo "[Theme]"
-                echo "Current=Sugar-Candy"
-            } >>"$sddm_conf"
+        if grep -q '^Current=' "$sddm_conf"; then
+            sed -i 's/^Current=.*/Current=Sugar-Candy/' "$sddm_conf"
         else
-            # Ajusta ou adiciona Current=
-            if grep -q '^Current=' "$sddm_conf"; then
-                sed -i 's/^Current=.*/Current=Sugar-Candy/' "$sddm_conf"
-            else
-                sed -i '/^\[Theme\]/a Current=Sugar-Candy' "$sddm_conf"
-            fi
+            sed -i '/^\[Theme\]/a Current=Sugar-Candy' "$sddm_conf"
         fi
     fi
 
-    local sddm_backgrounds_dir="/usr/share/sddm/themes/Sugar-Candy/Backgrounds"
     mkdir -p "$sddm_backgrounds_dir"
-    local image_path="$USER_HOME/Wallpapers/active_wallpaper/active.png"
-    local image_name="active.png"
     cp "$image_path" "$sddm_backgrounds_dir/"
 
-    local theme_conf="/usr/share/sddm/themes/Sugar-Candy/theme.conf"
-    if [[ ! -f "$theme_conf" ]]; then
+    if [[ -f "$theme_conf" ]]; then
+        if grep -q '^Background=' "$theme_conf"; then
+            sed -i "s|^Background=.*|Background=\"Backgrounds/$image_name\"|" "$theme_conf"
+        else
+            echo "Background=\"Backgrounds/$image_name\"" >>"$theme_conf"
+        fi
+    else
         log_error "File $theme_conf not found."
         exit 1
     fi
 
-    if grep -q '^Background=' "$theme_conf"; then
-        sed -i "s|^Background=.*|Background=\"Backgrounds/$image_name\"|" "$theme_conf"
-    else
-        echo "Background=\"Backgrounds/$image_name\"" >>"$theme_conf"
-    fi
-
-    chown "$CURRENT_USER":"$CURRENT_USER" "/usr/share/sddm/themes/Sugar-Candy/Backgrounds"
+    chown -R "$CURRENT_USER":"$CURRENT_USER" "$sddm_backgrounds_dir"
 
     log_info "SDDM Theme configured successfully."
 }

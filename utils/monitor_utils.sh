@@ -1,12 +1,20 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 set -euo pipefail
 
-scrDir="$(dirname "$(realpath "$0")")"
-source "$scrDir/utils/global_func.sh"
+SRC_DIR="$(dirname "$(realpath "$0")")"
 
+source "$SRC_DIR/utils/global_func.sh"
+
+# Get the best monitor configuration for hyprland config
 get_best_monitor() {
-    monitors_output=$(hyprctl monitors)
+
+    if ! monitors_output=$(hyprctl monitors 2>&1); then
+        log_warn "Hyprland not running or cannot get monitors: $monitors_output"
+        echo "monitor=DP-1,1920x1080@60,auto,1"
+        return 0
+    fi
+
     monitor_name=$(echo "$monitors_output" | grep -oP '^Monitor\s+\K\S+')
     modes_line=$(echo "$monitors_output" | grep -oP 'availableModes:\s+\K.*')
 
@@ -40,17 +48,20 @@ get_best_monitor() {
 
     echo "monitor=$monitor_name,${best_resolution}@${best_refresh},auto,1"
 }
+get_best_monitor
 
+# convert ddcutil commands to brightnessctl for laptop
 convert_ddcutil_to_brightnessctl() {
     local file_path="$1"
     if [[ ! -f "$file_path" ]]; then
-        log_error "File not found: $file_path"
+        log_error "$file_path not found"
         exit 1
     fi
 
     sed -i -r 's/ddcutil setvcp 10 ([0-9]{1,3})/brightnessctl set \1%/g' "$file_path"
 }
 
+# Replace the monitor line in the hyprland config
 replace_monitor_line() {
     local conf_file="$1"
     local new_monitor_line
