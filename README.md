@@ -1,4 +1,16 @@
-# ⚡ Arch + Hyprland Setup Script
+<h1 align="center">⚡ Arch + Hyprland Setup Script</h1>
+
+<br>
+
+<div align=center>
+
+![GitHub last commit](https://img.shields.io/github/last-commit/CaioCesarMDS/arch?style=for-the-badge&)
+![GitHub Repo stars](https://img.shields.io/github/stars/CaioCesarMDS/arch?style=for-the-badge&)
+![GitHub repo size](https://img.shields.io/github/repo-size/CaioCesarMDS/arch?style=for-the-badge&)
+
+</div>
+
+<br>
 
 ## 📌 About the Project
 
@@ -7,10 +19,9 @@ Automated Arch Linux post-install script focused on setting up a Wayland desktop
 
 <br>
 
-## 📎 Prerequisites and Guidelines
+## 📎 Prerequisites
 
 - Arch Linux must be already installed
-- Internet connection
 - `git` installed
 
 <br>
@@ -20,37 +31,33 @@ Automated Arch Linux post-install script focused on setting up a Wayland desktop
 ```txt
 .
 ├── assets/                                # Project assets
-│   └── wallpapers/
-│       └── clouds.png
-├── .config/                               # Dotfiles and configs
-├── core/                                  # Core system setup scripts
+├── .config/                               # Configuration files
+├── core/                                  # Core install scripts
 │   ├── configure_system.sh
 │   ├── env.sh
 │   ├── extras_tools.sh
 │   └── install_packages.sh
-├── hyprland/                              # Hyprland-specific setup
+├── hyprland/                              # Hyprland install scripts
 │   ├── configure_system.sh
 │   └── install_packages.sh
-├── README.md
-├── setup.sh                               # Main installer script
-└── utils.sh                               # Utility functions
+└── install.sh                             # Main installer script
 
 ```
 
 <br>
 
-## ✨ Main Features
+## ✨ What’s Included
 
-- Window manager: **Hyprland** with portal and utilities  
-- Notifications: **SwayNC**  
-- Launcher: **Wofi**  
-- Terminal: **Kitty**  
-- Clipboard manager: **Cliphist**  
-- Shell: **zsh** + **oh-my-zsh** + **Starship**  
-- Login manager: **SDDM**  
-- AUR helper: **yay**  
+- Window manager: **Hyprland**
+- Notifications: **SwayNC**
+- Launcher: **Wofi**
+- Terminal: **Kitty**
+- Clipboard manager: **Cliphist**
+- Shell: **zsh** + **zinit** + **Starship**
+- Login manager: **SDDM**
+- AUR helper: **yay**
 - Custom Waybar, wallpapers, fonts
-- Essential utilities: **btop**, **curl**, **git**, **imagemagick**, **neovim**, etc.
+- Essential utilities: **btop**, **curl**, **imagemagick**, **neovim**, etc.
 
 <br>
 
@@ -171,6 +178,6 @@ qt5-graphicaleffects
 
 ## 📜 License
 
-This project is licensed under the **GNU General Public License v3.0**.  
+This project is licensed under the **GNU General Public License v3.0**.
 See the [LICENSE](./LICENSE) file for more details.
 
