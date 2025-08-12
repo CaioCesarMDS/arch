@@ -32,6 +32,7 @@
         "dnd",
         "notifications",
         "volume",
+        "backlight",
         "buttons-grid"
     ],
     "widget-config": {
@@ -48,6 +49,9 @@
         },
         "volume": {
             "label": "󰕾"
+        },
+        "backlight": {
+            "label": "󰃟"
         },
         "buttons-grid": {
             "buttons-per-row": 4,

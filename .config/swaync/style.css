@@ -170,7 +170,7 @@ trough slider:hover {
 
 /* Widgets */
 
-.widget-volume {
+.widget-volume, .widget-backlight {
   font-size: 1.1rem;
   background-color: transparent;
   padding: 0.5rem 0.8rem 0.5rem 0.8rem;
