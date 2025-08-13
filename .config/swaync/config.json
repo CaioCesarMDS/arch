@@ -51,7 +51,8 @@
             "label": "󰕾"
         },
         "backlight": {
-            "label": "󰃟"
+            "label": "󰃟",
+            "device": "amdgpu_bl1"
         },
         "buttons-grid": {
             "buttons-per-row": 4,
