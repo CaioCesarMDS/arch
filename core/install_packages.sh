@@ -16,9 +16,10 @@ install_packages "system base" \
     xdg-user-dirs wireplumber
 
 install_packages "utility tools and dependencies" \
-    blueman bluez bluez-utils bat btop curl eza fastfetch fzf git hwinfo imagemagick \
-    inetutils jq languagetool man-db man-pages nano openssh openssl p7zip \
-    pacman-contrib procps-ng sassc shfmt tcl tk tree ufw unzip usbutils \
-    neovim xz wget zip zoxide zlib zsh
+    blueman bluez bluez-utils bat btop curl eza fastfetch fd \
+    fzf git hwinfo imagemagick inetutils jq languagetool \
+    man-db man-pages nano openssh openssl p7zip poppler \
+    pacman-contrib procps-ng resvg ripgrep sassc shfmt tcl tk tree \
+    ufw unzip usbutils neovim xz wget zip zoxide zlib zsh
 
 log_info "✅ All packages were installed successfully."

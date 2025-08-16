@@ -32,6 +32,7 @@
         "dnd",
         "notifications",
         "volume",
+        "backlight",
         "buttons-grid"
     ],
     "widget-config": {
@@ -48,6 +49,10 @@
         },
         "volume": {
             "label": "󰕾"
+        },
+        "backlight": {
+            "label": "󰃟",
+            "device": "amdgpu_bl1"
         },
         "buttons-grid": {
             "buttons-per-row": 4,
