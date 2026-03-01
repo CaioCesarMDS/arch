@@ -14,15 +14,6 @@ log_error() {
     echo "[ERROR] $*" >&2
 }
 
-# Detect the device type (laptop or desktop)
-detect_device_type() {
-    if ls /sys/class/power_supply/ | grep -qi "^BAT"; then
-        echo "laptop"
-    else
-        echo "desktop"
-    fi
-}
-
 # Check if the script is run as root
 check_root() {
     if [[ "$EUID" -ne 0 ]]; then

@@ -1,0 +1,58 @@
+{
+  "group/group-left": {
+    "orientation": "inherit",
+    //"mpris"
+    "modules": ["custom/notification", "clock", "tray"]
+  },
+  "custom/notification": {
+    "format": "",
+    "tooltip": false,
+    "on-click": "swaync-client -t -sw",
+    "escape": true
+  },
+  "clock": {
+    "format": "{:%H:%M:%S}",
+    "tooltip-format": "<tt>{calendar}</tt>",
+    "calendar": {
+      "format": {
+        "today": "<span color='#fAfBfC'><b>{}</b></span>"
+      }
+    },
+    "interval": 1
+  },
+  "tray": {
+    "icon-size": 14,
+    "spacing": 10
+  }
+  // "mpris": {
+  //   "format": "{status_icon} {title} {player_icon} {artist}",
+  //   "player-icons": {
+  //     "default": "",
+  //     "spotify": "󰓇",
+  //     "firefox": "󰈹",
+  //     "chrome": "",
+  //     "vlc": "󰕼"
+  //   },
+  //   "status-icons": {
+  //     "paused": "󰐊",
+  //     "playing": "󰏤",
+  //     "stopped": "󰓛"
+  //   },
+  //   "interval": 1,
+  //   "on-click": "playerctl play-pause",
+  //   "on-click-right": "playerctl next",
+  //   "on-click-middle": "playerctl previous",
+  //   "tooltip": true,
+  //   "tooltip-format": "{title} • {artist} • {dynamic}",
+  //   "dynamic-order": ["position", "length"],
+  //   "ellipsis": "…",
+  //   "title-len": 10,
+  //   "artist-len": 8,
+  //   "max-length": 25
+  // },
+  // "tray": {
+  //   "icon-size": 14,
+  //   "spacing": 10,
+  //   "show-passive-items": true
+  // }
+}

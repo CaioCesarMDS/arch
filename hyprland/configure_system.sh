@@ -8,203 +8,107 @@ source "$SRC_DIR/utils/global_func.sh"
 source "$SRC_DIR/utils/monitor_utils.sh"
 source "$SRC_DIR/core/env.sh"
 
-CONFIG_SRC="$SRC_DIR/.config"
-CONFIG_DEST="$USER_HOME/.config"
-
-WALLPAPER_SRC="$SRC_DIR/assets/Wallpapers"
-WALLPAPER_DEST="$USER_HOME/Wallpapers"
-ZSHRC="$USER_HOME/.zshrc"
-
-DEVICE_TYPE=$(detect_device_type)
-
-setup_terminal() {
-    log_info "Configuring terminal..."
-
-    if [[ -f "$ZSHRC" ]]; then
-        cp "$ZSHRC" "$USER_HOME/.zshrc.bak"
-    else
-        touch "$ZSHRC"
-    fi
-
-    cat >"$ZSHRC" <<'EOF'
-            export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-
-            # ------------------------
-            # Zinit (Plugin Manager)
-            # ------------------------
-            ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
-            [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
-            [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
-            source "${ZINIT_HOME}/zinit.zsh"
-
-            # ------------------------
-            # Plugins and Snippets
-            # ------------------------
-            zinit light zsh-users/zsh-autosuggestions
-            zinit light zsh-users/zsh-completions
-            zinit light zsh-users/zsh-syntax-highlighting
-
-            zinit light Aloxaf/fzf-tab
-
-            zinit snippet OMZP::git
-            zinit snippet OMZP::sudo
-            zinit snippet OMZP::archlinux
-
-            # ------------------------
-            # Plugins Configuration
-            # ------------------------
-            HISTSIZE=10000
-            HISTFILE="$HOME/.zsh_history"
-            SAVEHIST=HISTSIZE
-            HISTDUP=erase
-            setopt append_history
-            setopt share_history
-            setopt hist_ignore_all_dups
-            setopt hist_ignore_dups
-            setopt hist_save_no_dups
-            setopt hist_ignore_space
-            setopt hist_find_no_dups
-
-            # -------------------------
-            # Completion Fix & Style
-            # -------------------------
-            if [ ! -f ~/.zcompdump ] || grep -q "_complete" ~/.zcompdump 2>/dev/null; then
-                rm -f ~/.zcompdump*
-            fi
-            autoload -U compinit && compinit -C
-
-            zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-            zstyle ':completion:*' menu no
-            zstyle ':fzf-tab:completion:cd:*' fzf-preview use-cache 'ls --color $realpath'
-
-            # Pywal (terminal colors)
-            (cat ~/.cache/wal/sequences &)
-            source ~/.cache/wal/colors-tty.sh
-
-            # Starship prompt
-            eval "$(starship init zsh)"
-
-            # Set up zoxide
-            eval "$(zoxide init zsh)"
-
-            # Set up fzf
-            source <(fzf --zsh)
-
-            export FZF_DEFAULT_OPTS="
-                --height 40%
-                --layout=reverse
-                --border
-                --color=fg:#c0caf5,bg:#1a1b26,hl:#7aa2f7
-                --color=fg+:#c0caf5,bg+:#1f2335,hl+:#7dcfff
-                --color=info:#7dcfff,prompt:#7aa2f7,pointer:#f7768e
-                --color=marker:#9ece6a,spinner:#9ece6a,header:#bb9af7
-            "
-
-            export FZF_CTRL_R_OPTS="--style full"
-
-            export FZF_CTRL_T_OPTS="
-                --style full
-                --walker-skip .git,node_modules,target
-                --preview 'bat -n --color=always {}'
-                --bind 'ctrl-/:change-preview-window(down|hidden|)'
-            "
-
-            # Update System Packages and Tools
-            dev-update() {
-                echo "🛠️ Updating system tools..."
-                sudo pacman -Syu --noconfirm
-                yay -Syu --noconfirm
-                zinit self-update && zinit update --all
-                echo "🎉 Everything's is up to date!"
-            }
-
-            # ------------------------
-            # Aliases
-            # ------------------------
-            alias l="ls -la"
-            alias ls="eza --icons=always --color=always --long --git --no-filesize --no-time --no-user --no-permissions"
-            alias cd="z"
-EOF
+clone_or_update() {
+  local url="$1" dest="$2"
+  if [[ -d "$dest/.git" ]]; then
+    log_info "Updating $dest"
+    git -C "$dest" pull --ff-only || true
+  else
+    log_info "Cloning $url -> $dest"
+    rm -rf "$dest"
+    git clone --depth 1 "$url" "$dest"
+  fi
 }
 
 copy_configs() {
-    log_info "Copying configs to $CONFIG_DEST..."
+    log_info "Copying configs"
 
-    mkdir -p "$CONFIG_DEST"
-    cp -r "$CONFIG_SRC/"* "$CONFIG_DEST/"
+    local config_src="$SRC_DIR/.config"
+    local config_dest="$USER_HOME/.config"
 
-    replace_monitor_line "$CONFIG_DEST/hypr/hyprland.conf"
+    mkdir -p "$config_dest"
+    cp -r "$config_src/"* "$config_dest/"
 
-    if [[ "$DEVICE_TYPE" == "laptop" ]]; then
-        convert_ddcutil_to_brightnessctl "$CONFIG_DEST/hypr/hypridle.conf"
-
-        [[ -d "$CONFIG_SRC/waybar/laptop" ]] && cp -r "$CONFIG_SRC/waybar/laptop/"* "$CONFIG_DEST/waybar/"
-        [[ -d "$CONFIG_SRC/swaync/laptop" ]] && cp -r "$CONFIG_SRC/swaync/laptop/"* "$CONFIG_DEST/swaync/"
-    else
-        rm -rf "$CONFIG_DEST/waybar/laptop" "$CONFIG_DEST/swaync/laptop"
-    fi
-
-    chown -R "$CURRENT_USER":"$CURRENT_USER" "$CONFIG_DEST"
+    replace_monitor_line "$config_dest/hypr/hyprland.conf"
+    chown -R "$CURRENT_USER":"$CURRENT_USER" "$config_dest"
 }
 
 copy_wallpapers() {
-    log_info "Copying wallpapers to $WALLPAPER_DEST..."
+    local wallpaper_src="$SRC_DIR/assets/wallpapers"
+    local wallpaper_dest="$USER_HOME/Wallpapers"
 
-    if [[ ! -d "$WALLPAPER_SRC" ]]; then
+    if [[ ! -d "$wallpaper_src" ]]; then
         log_error "Wallpaper directory not found."
         exit 1
     fi
 
-    mkdir -p "$WALLPAPER_DEST"
-    cp -r "$WALLPAPER_SRC/"* "$WALLPAPER_DEST/"
-    chown -R "$CURRENT_USER":"$CURRENT_USER" "$WALLPAPER_DEST"
+    mkdir -p "$wallpaper_dest"
+    cp -r "$wallpaper_src/"* "$wallpaper_dest/"
+    chown -R "$CURRENT_USER":"$CURRENT_USER" "$wallpaper_dest"
 }
 
 set_sddm_theme() {
-    log_info "Configuring SDDM theme..."
+    log_info "Installing SDDM theme..."
 
-    local sddm_conf="/etc/sddm.conf"
-    local sddm_backgrounds_dir="/usr/share/sddm/themes/Sugar-Candy/Backgrounds"
-    local image_path="$USER_HOME/Wallpapers/active_wallpaper/active.jpg"
-    local image_name="active.jpg"
-    local theme_conf="/usr/share/sddm/themes/Sugar-Candy/theme.conf"
+    local repo_url="https://github.com/keyitdev/sddm-astronaut-theme.git"
+    local repo_dir="/usr/share/sddm/themes/sddm-astronaut-theme"
+    local metadata="${repo_dir}/metadata.desktop"
 
-    # Backup sddm.conf
-    if [[ -f "$sddm_conf" ]]; then
-        cp "$sddm_conf" "${sddm_conf}.bak"
+    clone_or_update "$repo_url" "$repo_dir"
+
+    # Copy fonts (if exist) and refresh font cache
+    if [[ -d "${repo_dir}/Fonts" ]]; then
+        cp -r "${repo_dir}/Fonts/"* /usr/share/fonts/ 2>/dev/null || true
+        fc-cache -f >/dev/null 2>&1 || true
     fi
 
-    if [[ ! -f "$sddm_conf" ]] || ! grep -q '^\[Theme\]' "$sddm_conf"; then
-        {
-            echo ""
-            echo "[Theme]"
-            echo "Current=Sugar-Candy"
-        } >>"$sddm_conf"
-    else
-        if grep -q '^Current=' "$sddm_conf"; then
-            sed -i 's/^Current=.*/Current=Sugar-Candy/' "$sddm_conf"
+    # Find available theme config files inside Themes/
+    if [[ ! -d "${repo_dir}/Themes" ]]; then
+        log_error "Themes directory not found in $repo_dir"
+        return 1
+    fi
+
+    mapfile -t available_themes < <(find "${repo_dir}/Themes" -maxdepth 1 -type f -name '*.conf' -printf '%f\n' | sort)
+    if [[ ${#available_themes[@]} -eq 0 ]]; then
+        log_error "No theme config files (*.conf) found under ${repo_dir}/Themes"
+        return 1
+    fi
+
+    # Interactive selection
+    echo "Select SDDM theme to install:"
+    PS3="Enter number (or Ctrl+C to cancel): "
+    select chosen_file in "${available_themes[@]}"; do
+        if [[ -n "$chosen_file" ]]; then
+        log_info "You selected: $chosen_file"
+        break
         else
-            sed -i '/^\[Theme\]/a Current=Sugar-Candy' "$sddm_conf"
+        echo "Invalid choice. Try again."
         fi
-    fi
+    done
 
-    mkdir -p "$sddm_backgrounds_dir"
-    cp "$image_path" "$sddm_backgrounds_dir/"
-
-    if [[ -f "$theme_conf" ]]; then
-        if grep -q '^Background=' "$theme_conf"; then
-            sed -i "s|^Background=.*|Background=\"Backgrounds/$image_name\"|" "$theme_conf"
+    # Update metadata.desktop -> ConfigFile=Themes/<chosen_file>
+    if [[ -f "$metadata" ]]; then
+        cp "$metadata" "${metadata}.bak" 2>/dev/null || true
+        if grep -q '^ConfigFile=' "$metadata"; then
+        sed -i "s|^ConfigFile=.*|ConfigFile=Themes/${chosen_file}|" "$metadata"
         else
-            echo "Background=\"Backgrounds/$image_name\"" >>"$theme_conf"
+        echo "ConfigFile=Themes/${chosen_file}" | tee -a "$metadata" >/dev/null
         fi
+        log_info "Updated metadata.desktop to use Themes/${chosen_file}"
     else
-        log_error "File $theme_conf not found."
-        exit 1
+        log_error "Metadata file not found at $metadata"
     fi
 
-    chown -R "$CURRENT_USER":"$CURRENT_USER" "$sddm_backgrounds_dir"
+    # Enable the theme globally by writing a small conf inside /etc/sddm.conf.d/
+    mkdir -p /etc/sddm.conf.d
+    echo -e "[Theme]\nCurrent=sddm-astronaut-theme" | tee /etc/sddm.conf.d/theme.conf >/dev/null
 
-    log_info "SDDM Theme configured successfully."
+    # Ensure virtual keyboard is configured for the greeter
+    mkdir -p /etc/sddm.conf.d
+    echo -e "[General]\nInputMethod=qtvirtualkeyboard" | tee /etc/sddm.conf.d/virtualkbd.conf >/dev/null
+
+    # Optional: give user a command to preview
+    log_info "SDDM theme installed/updated. Selected config: ${chosen_file}"
 }
 
 enable_sddm() {

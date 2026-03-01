@@ -14,9 +14,9 @@ main() {
     check_root
     update_system
 
-    run_script "./core/install_packages.sh"
-    run_script "./core/configure_system.sh"
-    run_script "./core/extras_tools.sh"
+    #run_script "./core/install_packages.sh"
+    #run_script "./core/configure_system.sh"
+    #run_script "./core/extras_tools.sh"
 
     run_script "./hyprland/install_packages.sh"
     run_script "./hyprland/configure_system.sh"

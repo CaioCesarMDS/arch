@@ -1,0 +1,46 @@
+{
+  "group/group-system": {
+    "orientation": "inherit",
+    "modules": ["bluetooth", "network", "battery", "custom/power"]
+  },
+  "bluetooth": {
+    "format-on": "",
+    "format-disabled": "󰂲",
+    "format-connected-battery": "󰂯",
+    "format-alt": "{device_alias} 󰂯",
+    "on-click-right": "blueman-manager",
+    "tooltip-format": "{controller_alias}\t{controller_address}\n\n{num_connections} connected",
+    "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}\n{device_address}",
+    "tooltip-format-enumerate-connected-battery": "{device_alias}\n{device_address}\n{device_battery_percentage}%"
+  },
+  "network": {
+    "format-wifi": "",
+    "format-ethernet": "󰈀",
+    "format-disconnected": "",
+    "tooltip-format-disconnected": "Error",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%) ",
+    "tooltip-format-ethernet": "{ifname} 🖧",
+    "on-click": "kitty nmtui"
+  },
+  "battery": {
+    "interval": 3,
+    "states": {
+      "good": 95,
+      "warning": 30,
+      "critical": 20
+    },
+    "format": "<span font='JetBrainsMono Nerd Font Mono 10' >{icon}</span> <span font='JetBrainsMono Nerd Font Mono 9'>{capacity}%</span>",
+    "rotate": 0,
+    "format-charging": "󰂄 {capacity}%",
+    "format-plugged": "󰂄 {capacity}%",
+    "format-alt": "{time} {icon}",
+    "format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
+  },
+  "custom/power": {
+    "format": "⏻",
+    "tooltip": false,
+    "on-click": "pkill -x rofi || ~/.config/rofi/powermenu/powermenu.sh",
+    "interval": "once"
+  }
+}

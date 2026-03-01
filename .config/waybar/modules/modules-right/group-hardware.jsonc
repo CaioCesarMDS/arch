@@ -1,0 +1,25 @@
+{
+  "group/group-hardware": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 400,
+      "children-class": "extras",
+      "transition-left-to-right": false
+    },
+    "modules": ["custom/hardware", "cpu", "memory"]
+  },
+  "custom/hardware": {
+    "format": "",
+    "tooltip": false
+  },
+  "cpu": {
+    "format": "<span font='JetBrainsMono Nerd Font Mono 15' rise='-2600'>󰍛</span> <span font='JetBrainsMono Nerd Font Mono 9'>{usage}%</span>",
+    "tooltip": true,
+    "interval": 5
+  },
+  "memory": {
+    "format": "<span font='JetBrainsMono Nerd Font Mono 15' rise='-2600'></span> <span font='JetBrainsMono Nerd Font Mono 9'>{percentage}%</span>",
+    "tooltip": true,
+    "interval": 5
+  }
+}

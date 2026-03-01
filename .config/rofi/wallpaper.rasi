@@ -1,0 +1,141 @@
+@import "colors.rasi"
+
+configuration {
+    modi:                        "drun";
+    show-icons:                  true;
+    drun-display-format:         "{name}";
+    font:                        "JetBrainsMono Nerd Font 10";
+}
+
+window {
+    width:                       80%;
+    enabled:                     true;
+    fullscreen:                  false;
+    transparency:                "real";
+    cursor:                      "default";
+    spacing:                     0em;
+    padding:                     0em;
+    border:                      0em;
+    border-radius:               30px 5px 30px 5px;
+    border-color:                transparent;
+    background-color:            @background;
+}
+
+mainbox {
+    enabled:                     true;
+    orientation:                 vertical;
+    children:                    [ "listview" , "inputbar" ];
+    background-color:            transparent;
+}
+
+listview {
+    enabled:                     true;
+    spacing:                     4em;
+    padding:                     3em;
+    lines:                       1;
+    dynamic:                     false;
+    fixed-height:                false;
+    fixed-columns:               true;
+    reverse:                     true;
+    cursor:                      "default";
+    background-color:            transparent;
+    text-color:                  @text;
+}
+
+element {
+    enabled:                     true;
+    spacing:                     0em;
+    padding:                     0em;
+    cursor:                      pointer;
+    background-color:            transparent;
+    text-color:                  @text;
+}
+
+element selected.normal {
+    background-color:            @border;
+    text-color:                  @text;
+}
+
+element-icon {
+    cursor:                      inherit;
+    size:                        10em;
+    background-color:            @text;
+    text-color:                  inherit;
+    expand:                      false;
+}
+
+element-text {
+    vertical-align:              0.5;
+    horizontal-align:            0.5;
+    cursor:                      inherit;
+    background-color:            transparent;
+    text-color:                  inherit;
+}
+
+inputbar {
+    enabled:                     true;
+    spacing:                     10px;
+    padding:                     30px 60px;
+    background-color:            transparent;
+    text-color:                  @background;
+	border-radius: 				 15px 5px 15px 5px;
+    orientation:                 horizontal;
+    children:                    [ "dummy", "textbox-prompt-colon", "entry", "entry-counter", "dummy" ];
+}
+
+dummy {
+    expand:                      true;
+    background-color:            transparent;
+}
+
+textbox-prompt-colon {
+    enabled:                     true;
+    expand:                      false;
+    str:                         "󰸉 ";
+    padding:                     10px 15px;
+    border-radius:               15px 5px 15px 5px;
+    background-color:            @border;
+    text-color:                  @text;
+}
+
+entry {
+    enabled:                     true;
+    expand:                      false;
+    width:                       300px;
+    padding:                     12px 16px;
+    border-radius:               5px 15px 5px 15px;
+    background-color:            @border;
+    text-color:                  @text;
+    cursor:                      text;
+    placeholder:                 "Search Wallpaper";
+}
+
+entry-counter {
+    enabled: 					 true; 
+    expand:                      false;
+	orientation:				 horizontal;	
+    padding:                     12px 16px;
+	border-radius:               15px 5px 15px 5px;
+    background-color:            @border;
+    text-color:                  @text;
+	children: 					 [ num-filtered-rows, textbox-divider, num-rows ];
+}
+
+#num-filtered-rows {
+    background-color:            inherit;
+	enabled: 					 true;	
+	text-color: 				 inherit;
+}
+
+#textbox-divider {
+    background-color:            inherit;
+	enabled: 					 true;
+	text-color: 				 inherit;
+	str: 						 "/";
+}
+
+#num-rows {
+    background-color:            inherit;
+	enabled: 					 true;
+	text-color: 				 inherit;
+}

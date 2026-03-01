@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 check() {
   command -v "$1" >/dev/null
@@ -47,7 +47,7 @@ fi
 
 pkill -x hyprpicker 2>/dev/null || true
 
-color=$(hyprpicker | tr -d '\n')
+color=$(hyprpicker 2>/dev/null | grep -Eo '^#[0-9a-fA-F]{6}$')
 
 if [[ -z "$color" ]]; then
   notify-send "Color Picker" "No color selected"

@@ -1,0 +1,6 @@
+* {
+    background: #0d0d0d;
+    text: #e5e5e5;
+    muted-text: #a0a0a0;
+    border: #2a2a2a;
+}

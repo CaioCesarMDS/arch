@@ -1,0 +1,85 @@
+@import "colors.rasi"
+
+configuration {
+    modi:                   "drun";
+    show-icons:             false;
+    font:                   "JetBrainsMono Nerd Font 10";
+}
+
+window {
+    width:                  40em;
+    height:                 32em;
+    transparency:           "real";
+    border-radius:          0.5em;
+    background-color:       @background;
+}
+
+mainbox {
+    orientation:            vertical;
+    background-color:       transparent;
+    children:               [ "imagebox", "listbox" ];
+}
+
+imagebox {
+    padding:                1em;
+    orientation:            vertical;
+    background-image:       url("~/.cache/wallpaper/current", width);
+    children:               [ "inputbar"];
+}
+
+inputbar {
+    border-radius:          2em;
+    background-color:       @background;
+    children:               [ "textbox-prompt-colon", "entry" ];
+}
+
+textbox-prompt-colon {
+    str:                    "";
+    expand:                 false;
+    padding:                1em 0.3em 0 1em;
+    background-color:       transparent;
+    text-color:             @text;
+}
+
+entry {
+    padding:                1em;
+    text-color:             @text;
+    placeholder:            "Search";
+    background-color:       transparent;
+    placeholder-color:      inherit;
+}
+
+listbox {
+    background-color:       @background;
+    children:               [ "listview" ];
+}
+
+listview {
+    padding:                1.5em;
+    spacing:                0.5em;
+    columns:                1;
+    cycle:                  true;
+    dynamic:                true;
+    scrollbar:              false;
+    fixed-height:           true;
+    fixed-columns:          true;
+    background-color:       transparent;
+    text-color:             @text;
+}
+
+element {
+    padding:                0.5em;
+    background-color:       transparent;
+    text-color:             @text;
+    border-radius:          1em;
+}
+
+element selected.normal {
+    background-color:       @border;
+}
+
+element-text {
+    background-color:       transparent;
+    text-color:             inherit;
+}
+

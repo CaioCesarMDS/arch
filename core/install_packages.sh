@@ -11,13 +11,14 @@ PROCESSOR=$(cpu_info)
 log_info "Installing essential packages for Arch"
 
 install_packages "system base" \
-    base base-devel efibootmgr grub fuse3 ${PROCESSOR}-ucode linux linux-firmware \
-    linux-headers make networkmanager pipewire pipewire-pulse os-prober \
+    base base-devel efibootmgr grub fuse3 ${PROCESSOR}-ucode \
+    linux linux-firmware linux-headers make networkmanager \
+    network-manager-applet pipewire pipewire-pulse os-prober \
     xdg-user-dirs wireplumber
 
 install_packages "utility tools and dependencies" \
     blueman bluez bluez-utils bat btop curl eza fastfetch fd \
-    fzf git hwinfo imagemagick inetutils jq languagetool \
+    fzf git gum hwinfo imagemagick inetutils jq languagetool \
     man-db man-pages nano openssh openssl p7zip poppler \
     pacman-contrib procps-ng resvg ripgrep sassc shfmt tcl tk tree \
     ufw unzip usbutils neovim xz wget zip zoxide zlib zsh

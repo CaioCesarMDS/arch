@@ -1,0 +1,15 @@
+{
+  "include": [
+    "~/.config/waybar/modules/modules-right/group-hardware.jsonc",
+    "~/.config/waybar/modules/modules-right/group-tools.jsonc",
+    "~/.config/waybar/modules/modules-right/group-system.jsonc"
+  ],
+  "group/group-right": {
+    "orientation": "inherit",
+    "modules": [
+      "group/group-hardware",
+      "group/group-tools",
+      "group/group-system"
+    ]
+  }
+}

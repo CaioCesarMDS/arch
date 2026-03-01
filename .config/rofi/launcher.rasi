@@ -1,0 +1,124 @@
+@import "colors.rasi"
+
+configuration {
+    modi:                   "drun,filebrowser,window,run";
+    show-icons:             true;
+    drun-display-format:    "{name}";
+    display-drun:           " ";
+    display-filebrowser:    " ";
+    display-window:         " ";
+    display-run:            " ";
+    window-format:          "{w} · {c} · {t}";
+    hover-select:           false;
+    font:                   "JetBrainsMono Nerd Font 10";
+    icon-theme:             "Papirus";
+}
+
+window {
+    width:                  56em;
+    height:                 35em;
+    transparency:           "real";
+    border-radius:          0.5em;
+    background-color:       @background;
+}
+
+mainbox {
+    orientation:            horizontal;
+    background-color:       transparent;
+    children:               [ "imagebox", "listbox" ];
+}
+
+imagebox {
+    padding:                0 0 0.5em 0;
+    orientation:            vertical;
+    background-image:       url("~/.cache/wallpaper/current", height);
+    children:               [ "inputbar", "dummy", "mode-switcher" ];
+}
+
+dummy {
+    background-color:       transparent;
+}
+
+mode-switcher {
+    orientation:            horizontal;
+    width:                  6.6em;
+    padding:                1.5em;
+    spacing:                1.5em;
+    background-color:       transparent;
+}
+
+button {
+    padding:                15px;
+    border-radius:          2em;
+    background-color:       @background;
+    text-color:             @text;
+}
+
+button selected {
+    background-color:       @border;
+}
+
+inputbar {
+    margin:                 1em;
+    border-radius:          2em;
+    background-color:       @background;
+    children:               [ "textbox-prompt-colon", "entry" ];
+}
+
+textbox-prompt-colon {
+    str:                    "";
+    expand:                 false;
+    background-color:       transparent;
+    padding:                1em 0.3em 0 1em;
+    text-color:             @text;
+}
+
+entry {
+    padding:                1em;
+    text-color:             @text;
+    placeholder:            "Search";
+    background-color:       transparent;
+    placeholder-color:      inherit;
+}
+
+listbox {
+    background-color:       @background;
+    children:               [ "listview" ];
+}
+
+listview {
+    padding:                1.5em;
+    spacing:                0.5em;
+    columns:                1;
+    cycle:                  true;
+    dynamic:                true;
+    scrollbar:              false;
+    fixed-height:           true;
+    fixed-columns:          true;
+    background-color:       transparent;
+    text-color:             @text;
+}
+
+element {
+    padding:                0.5em;
+    background-color:       transparent;
+    text-color:             @text;
+    border-radius:          1.5em;
+}
+
+element selected.normal {
+    background-color:       @border;
+}
+
+element-icon {
+    size:                   2.5em;
+    background-color:       transparent;
+    text-color:             inherit;
+}
+
+element-text {
+    horizontal-align:       0.1;
+    vertical-align:         0.5;
+    background-color:       transparent;
+    text-color:             inherit;
+}

@@ -48,18 +48,6 @@ get_best_monitor() {
 
     echo "monitor=$monitor_name,${best_resolution}@${best_refresh},auto,1"
 }
-get_best_monitor
-
-# convert ddcutil commands to brightnessctl for laptop
-convert_ddcutil_to_brightnessctl() {
-    local file_path="$1"
-    if [[ ! -f "$file_path" ]]; then
-        log_error "$file_path not found"
-        exit 1
-    fi
-
-    sed -i -r 's/ddcutil setvcp 10 ([0-9]{1,3})/brightnessctl set \1%/g' "$file_path"
-}
 
 # Replace the monitor line in the hyprland config
 replace_monitor_line() {

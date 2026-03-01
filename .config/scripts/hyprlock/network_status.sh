@@ -1,27 +1,32 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-status="$(nmcli general status | grep -oh "\w*connect\w*")"
+output=""
 
-if [[ "$status" == "disconnected" ]]; then
-  printf "󰤮 "
-elif [[ "$status" == "connecting" ]]; then
-  printf "󱍸 "
-elif [[ "$status" == "connected" ]]; then
-  # strength="$(nmcli -f IN-USE,SIGNAL device wifi | grep '*' | awk '{print $2}')"
-  strength="$(python $HOME/.config/scripts/wifi_conn_strength.sh)"
-  if [[ "$?" == "0" ]]; then
-    if [[ "$strength" -eq "0" ]]; then
-      printf "󰤯 "
-    elif [[ ("$strength" -ge "0") && ("$strength" -le "25") ]]; then
-      printf "󰤟 "
-    elif [[ ("$strength" -ge "25") && ("$strength" -le "50") ]]; then
-      printf "󰤢 "
-    elif [[ ("$strength" -ge "50") && ("$strength" -le "75") ]]; then
-      printf "󰤥 "
-    elif [[ ("$strength" -ge "75") && ("$strength" -le "100") ]]; then
-      printf "󰤨 "
+check_network() {
+  local status strength level icon
+  status="$(nmcli general status | grep -oh '\w*connect\w*')"
+
+  case "$status" in
+  disconnected) output+="󰤮" ;;
+  connecting) output+="󱍸" ;;
+  connected)
+    strength="$(nmcli -t -f ACTIVE,SIGNAL dev wifi | awk -F: '/^yes/{print $2}')"
+    if [[ -n "$strength" ]]; then
+      level=$((strength / 25))
+      case $level in
+      0) icon="󰤯" ;;
+      1) icon="󰤟" ;;
+      2) icon="󰤢" ;;
+      3) icon="󰤥" ;;
+      4) icon="󰤨" ;;
+      esac
+      output+="$icon $strength%"
+    else
+      output+="󰈀"
     fi
-  else
-    printf "󰈀 "
-  fi
-fi
+    ;;
+  esac
+}
+
+check_network
+echo "$output"

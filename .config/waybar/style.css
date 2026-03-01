@@ -1,153 +1,190 @@
-@import url("../../.cache/wal/colors-waybar.css");
+@define-color background #0d0d0d;
+@define-color background2 rgba(255, 255, 255, 0.1);
+@define-color text #e5e5e5;
+@define-color muted-text #a0a0a0;
+@define-color border #2a2a2a;
 
 * {
-    all: unset;
-    font-size: 1.25rem;
-    font-family: "JetBrainsMono Nerd Font Mono", "FiraCode Nerd Font";
-    border: none;
+  all: unset;
+  border: none;
+  box-shadow: none;
+  font-size: 1.1rem;
+  min-height: 2rem;
+  font-family: 'JetBrainsMono Nerd Font Mono', 'monospace';
 }
 
-.modules-left,
-.modules-center,
-.modules-right {
-    padding: 0.45rem 0.6rem;
-    border-radius: 10px;
-    background-color: alpha(@background, 0.6);
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
-}
-
-.modules-left {
-    margin: 0.4rem 0 0.5rem 0.6rem;
-}
-
-.modules-center {
-    margin: 0.4rem 0 0.5rem 0;
-}
-
-.modules-right {
-    margin: 0.4rem 0.5rem 0.6rem 0;
+window#waybar {
+  background-color: transparent;
 }
 
 tooltip {
-    background: @background;
-    border-radius: 8px;
-    border: 1px solid @color7;
-    color: @color7;
+  background: @background;
+  border: 2px solid @border;
+  color: @text;
+  border-radius: 8px;
 }
 
 #custom-notification:hover,
 #clock:hover,
+#custom-hardware:hover,
+#cpu:hover,
+#memory:hover,
+#custom-tools:hover,
 #custom-cliphist:hover,
 #custom-bluefilter:hover,
 #bluetooth:hover,
 #network:hover,
-#custom-power:hover,
-#battery:hover {
-    transition: all 0.3s ease;
-    color: @color9;
+#battery:hover,
+#custom-power:hover {
+  transition: all 0.3s ease;
+  color: @muted-text;
 }
 
 /* Modules Left */
 
 #custom-notification,
 #clock,
-#tray {
-    padding: 0 0.6rem;
-    transition: all 0.3s ease;
-    color: @color7;
+#tray,
+#mpris {
+  margin: 0.3rem 0 0 0.6rem;
+  padding: 0 1rem;
+  transition: all 0.3s ease;
+  color: @text;
+  background-color: @background2;
+  border-radius: 8px;
 }
 
-#clock {
-    font-size: 1rem;
+#custom-notification {
+  font-size: 1.2rem;
+}
+
+#clock,
+#mpris {
+  font-size: 0.9rem;
 }
 
 /* Modules Center */
 
 #workspaces {
-    padding: 0 0.7rem;
+  margin: 0.3rem 0 0 0;
+  padding: 0px 0.7rem;
+  background-color: @background2;
+  border-radius: 8px;
 }
 
 #workspaces button {
-    padding: 0 0.4rem;
-    color: alpha(@color9, 0.4);
-    transition: all 0.2s ease;
+  padding: 0 0.4rem;
+  color: alpha(@muted-text, 0.4);
+  transition: all 0.2s ease;
 }
 
 #workspaces button:hover {
-    color: rgba(0, 0, 0, 0);
-    text-shadow: 0 0 1.5px rgba(0, 0, 0, 0.5);
-    transition: all 0.5s ease;
+  color: rgba(0, 0, 0, 0);
+  text-shadow: 0px 0px 1.5px rgba(0, 0, 0, 0.5);
+  transition: all 0.5s ease;
 }
 
 #workspaces button.active {
-    color: @color9;
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  color: @muted-text;
+  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
 }
 
 #workspaces button.empty {
-    color: rgba(0, 0, 0, 0);
-    text-shadow: 0 0 1.5px rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0);
+  text-shadow: 0px 0px 1.5px rgba(0, 0, 0, 0.2);
 }
 
 #workspaces button.empty:hover {
-    color: rgba(0, 0, 0, 0);
-    text-shadow: 0 0 1.5px rgba(0, 0, 0, 0.5);
-    transition: all 1s ease;
+  color: rgba(0, 0, 0, 0);
+  text-shadow: 0px 0px 1.5px rgba(0, 0, 0, 0.5);
+  transition: all 0.5s ease;
 }
 
 #workspaces button.empty.active {
-    color: @color9;
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  color: @muted-text;
+  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Modules Right */
 
-#custom-expand {
-    padding: 0 0.6rem;
-    color: alpha(@foreground, 0.2);
-    text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
-    transition: all 0.3s ease;
+#custom-hardware,
+#custom-tools {
+  font-size: 1.3rem;
+  margin: 0.3rem 0 0 0.6rem;
+  padding: 0 1rem;
+  color: @text;
+  background-color: @background2;
+  border-radius: 8px;
 }
 
-#custom-expand:hover {
-    color: rgba(255, 255, 255, 0.2);
-    text-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+/* Left Components*/
+#cpu,
+#custom-cliphist,
+#bluetooth {
+  padding-left: 1rem;
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 8px;
+}
+
+/* Rigth Components */
+#memory,
+#custom-bluefilter,
+#custom-power {
+  padding-right: 1rem;
+  border-bottom-right-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+#cpu,
+#memory,
+#custom-cliphist,
+#custom-colorpicker,
+#custom-bluefilter,
+#bluetooth,
+#network,
+#battery,
+#custom-power {
+  margin-top: 0.3rem;
+  color: @text;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+#memory,
+#custom-colorpicker {
+  padding: 0 0.8rem;
 }
 
 #custom-cliphist,
 #custom-colorpicker,
 #custom-bluefilter {
-    padding: 0 0.7rem;
-    transition: all 0.3s ease;
-    color: @color7;
+  font-size: 1.3rem;
 }
 
-#custom-bluefilter {
-    font-size: 1.3rem;
-}
-
-#custom-separator {
-    color: transparent;
-    text-shadow: 0 0 1.5px rgba(12, 12, 12, 0.818);
+#custom-cliphist {
+  margin-left: 0.6rem;
 }
 
 #bluetooth,
 #network,
-#custom-power,
-#battery {
-    padding: 0 0.7rem;
-    transition: all 0.3s ease;
-    color: @color7;
+#battery,
+#custom-power {
+  padding: 0 0.7rem;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 #bluetooth {
-    font-size: 1.09rem;
+  margin-left: 0.6rem;
+  font-size: 1.1rem;
 }
 
-#custom-power {
-    font-size: 1.2rem;
+#network {
+  font-size: 1.5rem;
 }
 
 #battery {
-    font-size: 0.9rem;
+  font-size: 0.8rem;
+}
+
+#custom-power {
+  margin-right: 0.6rem;
 }

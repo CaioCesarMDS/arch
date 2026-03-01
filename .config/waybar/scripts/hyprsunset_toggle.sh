@@ -8,9 +8,9 @@ desired_temp=4800
 
 if [[ "$1" != "--toggle" ]]; then
   if pgrep -x hyprsunset >/dev/null; then
-    echo "󰤄"  # Ativado
+    echo "󰤄"
   else
-    echo ""  # Desativado
+    echo ""
   fi
   flock -u 200
   exit 0
